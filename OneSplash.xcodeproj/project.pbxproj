@@ -3,29 +3,31 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8848218403177CA5C981A38D /* Pods_OneSplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 557F2207D3FF3C5286C6222E /* Pods_OneSplash.framework */; };
 		9C07CB5B24D93FCA00DD39DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */; };
 		9C07CB5D24D93FCA00DD39DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */; };
 		9C07CB5F24D93FCA00DD39DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB5E24D93FCA00DD39DF /* ViewController.swift */; };
-		9C07CB6224D93FCA00DD39DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6024D93FCA00DD39DF /* Main.storyboard */; };
 		9C07CB6524D93FCA00DD39DF /* OneSplash.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB6324D93FCA00DD39DF /* OneSplash.xcdatamodeld */; };
 		9C07CB6724D93FCE00DD39DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6624D93FCE00DD39DF /* Assets.xcassets */; };
 		9C07CB6A24D93FCE00DD39DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		557F2207D3FF3C5286C6222E /* Pods_OneSplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68740E3173C4B9F0130213B5 /* Pods-OneSplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSplash.debug.xcconfig"; path = "Target Support Files/Pods-OneSplash/Pods-OneSplash.debug.xcconfig"; sourceTree = "<group>"; };
 		9C07CB5724D93FCA00DD39DF /* OneSplash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneSplash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		9C07CB5E24D93FCA00DD39DF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9C07CB6124D93FCA00DD39DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9C07CB6424D93FCA00DD39DF /* OneSplash.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OneSplash.xcdatamodel; sourceTree = "<group>"; };
 		9C07CB6624D93FCE00DD39DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C07CB6924D93FCE00DD39DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C07CB6B24D93FCE00DD39DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2377561D3E1E388E717843A /* Pods-OneSplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSplash.release.xcconfig"; path = "Target Support Files/Pods-OneSplash/Pods-OneSplash.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +35,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8848218403177CA5C981A38D /* Pods_OneSplash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		614A60D4D890F944B86EB81D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				557F2207D3FF3C5286C6222E /* Pods_OneSplash.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		93B105292E82EB08A626E138 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				68740E3173C4B9F0130213B5 /* Pods-OneSplash.debug.xcconfig */,
+				E2377561D3E1E388E717843A /* Pods-OneSplash.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		9C07CB4E24D93FC900DD39DF = {
 			isa = PBXGroup;
 			children = (
 				9C07CB5924D93FCA00DD39DF /* OneSplash */,
 				9C07CB5824D93FCA00DD39DF /* Products */,
+				93B105292E82EB08A626E138 /* Pods */,
+				614A60D4D890F944B86EB81D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,16 +80,47 @@
 		9C07CB5924D93FCA00DD39DF /* OneSplash */ = {
 			isa = PBXGroup;
 			children = (
-				9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */,
-				9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */,
-				9C07CB5E24D93FCA00DD39DF /* ViewController.swift */,
-				9C07CB6024D93FCA00DD39DF /* Main.storyboard */,
+				9C07CB7424D943AD00DD39DF /* Application Layer */,
+				9C07CB7624D943D000DD39DF /* Business Layer */,
+				9C07CB7724D9440900DD39DF /* Presentation Layer */,
 				9C07CB6624D93FCE00DD39DF /* Assets.xcassets */,
 				9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */,
 				9C07CB6B24D93FCE00DD39DF /* Info.plist */,
-				9C07CB6324D93FCA00DD39DF /* OneSplash.xcdatamodeld */,
 			);
 			path = OneSplash;
+			sourceTree = "<group>";
+		};
+		9C07CB7424D943AD00DD39DF /* Application Layer */ = {
+			isa = PBXGroup;
+			children = (
+				9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */,
+				9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */,
+			);
+			path = "Application Layer";
+			sourceTree = "<group>";
+		};
+		9C07CB7624D943D000DD39DF /* Business Layer */ = {
+			isa = PBXGroup;
+			children = (
+				9C07CB6324D93FCA00DD39DF /* OneSplash.xcdatamodeld */,
+			);
+			path = "Business Layer";
+			sourceTree = "<group>";
+		};
+		9C07CB7724D9440900DD39DF /* Presentation Layer */ = {
+			isa = PBXGroup;
+			children = (
+				9C07CB7824D944B600DD39DF /* Controller */,
+			);
+			path = "Presentation Layer";
+			sourceTree = "<group>";
+		};
+		9C07CB7824D944B600DD39DF /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9C07CB5E24D93FCA00DD39DF /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,9 +130,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9C07CB6E24D93FCE00DD39DF /* Build configuration list for PBXNativeTarget "OneSplash" */;
 			buildPhases = (
+				56D82D49D69A2FE666D09E58 /* [CP] Check Pods Manifest.lock */,
 				9C07CB5324D93FCA00DD39DF /* Sources */,
 				9C07CB5424D93FCA00DD39DF /* Frameworks */,
 				9C07CB5524D93FCA00DD39DF /* Resources */,
+				6D12EF78D6C7B9D83A42C1D8 /* [CP] Embed Pods Frameworks */,
+				9C07CB7324D9436300DD39DF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -98,7 +154,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1140;
-				ORGANIZATIONNAME = "Rustam-Deniz";
+				ORGANIZATIONNAME = Terns;
 				TargetAttributes = {
 					9C07CB5624D93FCA00DD39DF = {
 						CreatedOnToolsVersion = 11.4.1;
@@ -130,11 +186,69 @@
 			files = (
 				9C07CB6A24D93FCE00DD39DF /* LaunchScreen.storyboard in Resources */,
 				9C07CB6724D93FCE00DD39DF /* Assets.xcassets in Resources */,
-				9C07CB6224D93FCA00DD39DF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		56D82D49D69A2FE666D09E58 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSplash-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D12EF78D6C7B9D83A42C1D8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OneSplash/Pods-OneSplash-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OneSplash/Pods-OneSplash-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OneSplash/Pods-OneSplash-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C07CB7324D9436300DD39DF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9C07CB5324D93FCA00DD39DF /* Sources */ = {
@@ -151,14 +265,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9C07CB6024D93FCA00DD39DF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9C07CB6124D93FCA00DD39DF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -286,6 +392,7 @@
 		};
 		9C07CB6F24D93FCE00DD39DF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68740E3173C4B9F0130213B5 /* Pods-OneSplash.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -304,6 +411,7 @@
 		};
 		9C07CB7024D93FCE00DD39DF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E2377561D3E1E388E717843A /* Pods-OneSplash.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

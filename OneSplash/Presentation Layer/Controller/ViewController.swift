@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  OneSplash
 //
-//  Created by Rustam-Deniz on 8/4/20.
-//  Copyright © 2020 Rustam-Deniz. All rights reserved.
+//  Created by Terns on 8/4/20.
+//  Copyright © 2020 Terns. All rights reserved.
 //
 
 import UIKit
@@ -12,9 +12,7 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view.
+		view.backgroundColor = .white
 	}
 
-
 }
-
