@@ -14,6 +14,10 @@
 		9C07CB6524D93FCA00DD39DF /* OneSplash.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB6324D93FCA00DD39DF /* OneSplash.xcdatamodeld */; };
 		9C07CB6724D93FCE00DD39DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6624D93FCE00DD39DF /* Assets.xcassets */; };
 		9C07CB6A24D93FCE00DD39DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */; };
+		9C1E8F8324D97CAA00AE44A8 /* UnsplashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8224D97CAA00AE44A8 /* UnsplashAPI.swift */; };
+		9C1E8F8524D97F0A00AE44A8 /* UnsplashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8424D97F0A00AE44A8 /* UnsplashService.swift */; };
+		9C1E8F8A24D9807A00AE44A8 /* PhotoURLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */; };
+		9C1E8F8C24D9833500AE44A8 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8B24D9833500AE44A8 /* Photo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +31,10 @@
 		9C07CB6624D93FCE00DD39DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C07CB6924D93FCE00DD39DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C07CB6B24D93FCE00DD39DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C1E8F8224D97CAA00AE44A8 /* UnsplashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashAPI.swift; sourceTree = "<group>"; };
+		9C1E8F8424D97F0A00AE44A8 /* UnsplashService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashService.swift; sourceTree = "<group>"; };
+		9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoURLs.swift; sourceTree = "<group>"; };
+		9C1E8F8B24D9833500AE44A8 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E2377561D3E1E388E717843A /* Pods-OneSplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSplash.release.xcconfig"; path = "Target Support Files/Pods-OneSplash/Pods-OneSplash.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +91,7 @@
 				9C07CB7424D943AD00DD39DF /* Application Layer */,
 				9C07CB7624D943D000DD39DF /* Business Layer */,
 				9C07CB7724D9440900DD39DF /* Presentation Layer */,
+				9C1E8F8124D97C7A00AE44A8 /* Data Access Layer */,
 				9C07CB6624D93FCE00DD39DF /* Assets.xcassets */,
 				9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */,
 				9C07CB6B24D93FCE00DD39DF /* Info.plist */,
@@ -103,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				9C07CB6324D93FCA00DD39DF /* OneSplash.xcdatamodeld */,
+				9C1E8F8424D97F0A00AE44A8 /* UnsplashService.swift */,
 			);
 			path = "Business Layer";
 			sourceTree = "<group>";
@@ -110,6 +120,7 @@
 		9C07CB7724D9440900DD39DF /* Presentation Layer */ = {
 			isa = PBXGroup;
 			children = (
+				9C1E8F8624D97FB700AE44A8 /* Model */,
 				9C07CB7824D944B600DD39DF /* Controller */,
 			);
 			path = "Presentation Layer";
@@ -121,6 +132,23 @@
 				9C07CB5E24D93FCA00DD39DF /* ViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		9C1E8F8124D97C7A00AE44A8 /* Data Access Layer */ = {
+			isa = PBXGroup;
+			children = (
+				9C1E8F8224D97CAA00AE44A8 /* UnsplashAPI.swift */,
+			);
+			path = "Data Access Layer";
+			sourceTree = "<group>";
+		};
+		9C1E8F8624D97FB700AE44A8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */,
+				9C1E8F8B24D9833500AE44A8 /* Photo.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,9 +284,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C07CB5F24D93FCA00DD39DF /* ViewController.swift in Sources */,
+				9C1E8F8324D97CAA00AE44A8 /* UnsplashAPI.swift in Sources */,
+				9C1E8F8A24D9807A00AE44A8 /* PhotoURLs.swift in Sources */,
+				9C1E8F8C24D9833500AE44A8 /* Photo.swift in Sources */,
 				9C07CB5B24D93FCA00DD39DF /* AppDelegate.swift in Sources */,
 				9C07CB5D24D93FCA00DD39DF /* SceneDelegate.swift in Sources */,
 				9C07CB6524D93FCA00DD39DF /* OneSplash.xcdatamodeld in Sources */,
+				9C1E8F8524D97F0A00AE44A8 /* UnsplashService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
