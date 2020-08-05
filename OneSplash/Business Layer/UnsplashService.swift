@@ -33,4 +33,30 @@ class UnsplashService {
 			}
 		}
 	}
+    
+    func getCollections(page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.token,
+            "page": page
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.collectionsPostfix, method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let collection = try decoder.decode([Collection].self, from: data!)
+                        print(collection)
+                        success(collection)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
 }
