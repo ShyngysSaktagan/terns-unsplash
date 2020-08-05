@@ -12,8 +12,6 @@ import SnapKit
 class MainScreenViewController: UIViewController {
     
     let viewModel : MainViewViewModel
-    var page = 1
-    var counting = 8
     
     init(viewModel: MainViewViewModel) {
         self.viewModel = viewModel
@@ -48,7 +46,7 @@ class MainScreenViewController: UIViewController {
     }
     
     func fetchCollections() {
-        viewModel.getCollections(page: page)
+        viewModel.getCollections(page: viewModel.page)
     }
     
     func configureCollectionView() {
@@ -68,7 +66,9 @@ class MainScreenViewController: UIViewController {
 
 extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 32, height: collectionView.frame.width/2)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,11 +78,11 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ExploreCell
         let item = viewModel.collections[indexPath.row]
-        if (indexPath.row+1) / counting == 1 {
+        if (indexPath.row+1) / viewModel.counting == 1 {
             print("hello")
-            page += 1
-            viewModel.getCollections(page: page)
-            counting *= 2
+            viewModel.page += 1
+            viewModel.getCollections(page: viewModel.page)
+            viewModel.counting *= 2
         }
         cell?.imageView.load(urlString: item.coverPhoto.urls.full)
         cell?.titleLabel.text = item.title

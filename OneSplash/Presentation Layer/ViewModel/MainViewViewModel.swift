@@ -11,6 +11,8 @@ import UIKit
 class MainViewViewModel {
     
     var collections : [Collection] = []
+    var page = 1
+    var counting = 8
     
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
@@ -23,9 +25,8 @@ class MainViewViewModel {
         service.getCollections(page: page, success: { [weak self]  data in
             self?.collections.append(contentsOf: data)
             self?.didLoadTableItems?()
-        } ) { error in
+        }, failure: { error in
             print(error)
-        }
+        })
     }
-    
 }

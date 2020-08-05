@@ -17,9 +17,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let scene = (scene as? UIWindowScene) else { return }
 		let window = UIWindow(windowScene: scene)
 		let nav = UINavigationController()
-		let mainVC = ViewController()
+        let service = UnsplashService()
+        let viewModel = MainViewViewModel(service: service)
+		let mainVC = MainScreenViewController(viewModel: viewModel)
 		nav.viewControllers = [mainVC]
-		window.rootViewController = nav
+		window.rootViewController = mainVC
 		self.window = window
 		window.backgroundColor = .white
 		window.makeKeyAndVisible()

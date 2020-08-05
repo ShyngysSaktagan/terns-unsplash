@@ -23,7 +23,9 @@ class AppsHeaderHorizontalController: HorizontalSnappingController, UICollection
         collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return .init(width: view.frame.width - 48, height: view.frame.height)
         return .init(width: view.frame.width - 60, height: 200)
     }
@@ -39,7 +41,9 @@ class AppsHeaderHorizontalController: HorizontalSnappingController, UICollection
         return cell ?? UICollectionViewCell()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return .init(top: 16, left: 0, bottom: 0, right: 0)
     }
 }

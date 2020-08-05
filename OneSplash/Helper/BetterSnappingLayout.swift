@@ -8,6 +8,10 @@
 
 import UIKit
 
+//Snap to center of a cell when scrolling UICollectionView horizontally
+//Taken from StackOverflow
+//https://stackoverflow.com/questions/33855945/snap-to-center-of-a-cell-when-scrolling-uicollectionview-horizontally
+
 class BetterSnappingLayout: UICollectionViewFlowLayout {
     
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {

@@ -11,4 +11,5 @@ struct UnsplashAPI {
 	static let baseURL = "https://api.unsplash.com"
 	static let token = "RU0U_ebJog-fHdm3nI5WuJUGzM1gJxjfI8lFypW0J1Y"
 	static let photosPostfix = "/photos"
+    static let collectionsPostfix = "/collections"
 }
