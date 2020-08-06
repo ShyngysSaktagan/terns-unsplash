@@ -13,7 +13,7 @@ class UnsplashService {
 	
 	func getSamplePhotos() {
 		let params: Parameters = [
-			"client_id": UnsplashAPI.token
+			"client_id": UnsplashAPI.Stoken
 		]
 		AF.request(UnsplashAPI.baseURL + UnsplashAPI.photosPostfix, method: .get, parameters: params).response { (response) in
 			switch response.result {
@@ -36,7 +36,7 @@ class UnsplashService {
     
     func getCollections(page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
-            "client_id": UnsplashAPI.token,
+            "client_id": UnsplashAPI.Stoken,
             "page": page
         ]
         
@@ -50,6 +50,34 @@ class UnsplashService {
                         let collection = try decoder.decode([Collection].self, from: data!)
                         print(collection)
                         success(collection)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func getPhotos(id: Int, totalPhotos: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "id": id,
+            "per_page": totalPhotos
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.collectionsPostfix + "/\(id)/\(UnsplashAPI.photosPostfix)"
+            , method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode([Photo].self, from: data!)
+                        print(photos)
+                        success(photos)
                     } catch {
                         debugPrint(error)
                     }

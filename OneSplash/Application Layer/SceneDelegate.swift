@@ -12,21 +12,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
 
-
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		guard let scene = (scene as? UIWindowScene) else { return }
+        configureNavigationBar()
 		let window = UIWindow(windowScene: scene)
-		let nav = UINavigationController()
         let service = UnsplashService()
         let viewModel = MainViewViewModel(service: service)
 		let mainVC = MainScreenViewController(viewModel: viewModel)
-		nav.viewControllers = [mainVC]
-		window.rootViewController = mainVC
+		let nav = UINavigationController(rootViewController: mainVC)
+		window.rootViewController = nav
 		self.window = window
 		window.backgroundColor = .white
 		window.makeKeyAndVisible()
 	}
-
+    
+    func configureNavigationBar() {
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UIBarButtonItem.appearance().tintColor = .white
+        UINavigationBar.appearance().isTranslucent = true
+    }
+    
 	func sceneDidDisconnect(_ scene: UIScene) {
 	}
 

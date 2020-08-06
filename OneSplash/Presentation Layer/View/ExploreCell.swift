@@ -30,7 +30,7 @@ class ExploreCell: UICollectionViewCell {
     
     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .black)
+        label.font = .systemFont(ofSize: 18, weight: .heavy)
         label.textColor = .white
         return label
     }()

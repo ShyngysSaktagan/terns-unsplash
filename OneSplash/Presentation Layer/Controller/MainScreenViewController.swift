@@ -50,7 +50,6 @@ class MainScreenViewController: UIViewController {
     }
     
     func configureCollectionView() {
-        
         view.addSubview(collectionView)
         collectionView.backgroundColor = .white
         collectionView.delegate = self
@@ -84,9 +83,20 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
             viewModel.getCollections(page: viewModel.page)
             viewModel.counting *= 2
         }
+        cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)
         cell?.imageView.load(urlString: item.coverPhoto.urls.full)
         cell?.titleLabel.text = item.title
         return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = viewModel.collections[indexPath.row]
+        let service = UnsplashService()
+        let viewModel = ExploreDetailViewModel(service: service)
+        let exploreDetailVC = ExploreDetailViewController(viewModel: viewModel)
+        exploreDetailVC.collection = item
+        exploreDetailVC.title = item.title
+        navigationController?.pushViewController(exploreDetailVC, animated: true)
     }
 }
 

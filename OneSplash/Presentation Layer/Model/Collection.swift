@@ -12,5 +12,5 @@ struct Collection: Codable, Identifiable {
     let id: Int
     let title: String
     let coverPhoto: Photo
-    let previewPhotos: [Photo]
+    let totalPhotos : Int
 }

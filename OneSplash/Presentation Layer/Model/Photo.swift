@@ -18,4 +18,5 @@ struct Photo: Codable, Identifiable {
 	let description: String?
 	let altDescription: String?
 	let urls: PhotoURLs
+    let user: User
 }
