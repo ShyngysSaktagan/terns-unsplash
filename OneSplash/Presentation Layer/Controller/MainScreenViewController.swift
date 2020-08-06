@@ -60,7 +60,6 @@ class MainScreenViewController: UIViewController {
             make.height.equalTo(view.frame.width/2)
         }
     }
-
 }
 
 extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
