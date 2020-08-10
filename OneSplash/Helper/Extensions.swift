@@ -17,6 +17,10 @@ extension UILabel {
     }
 }
 
+extension UIColor {
+    static let bcc = UIColor(red: 17 / 255, green: 17 / 255, blue: 17 / 255, alpha: 1)
+}
+
 extension UIImageView {
     convenience init(cornerRadius: CGFloat) {
         self.init(image: nil)

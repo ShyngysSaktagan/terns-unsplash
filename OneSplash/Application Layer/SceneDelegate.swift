@@ -17,8 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         configureNavigationBar()
 		let window = UIWindow(windowScene: scene)
         let service = UnsplashService()
-        let viewModel = MainViewViewModel(service: service)
-		let mainVC = MainScreenViewController(viewModel: viewModel)
+        let mainViewViewModel = MainViewViewModel(service: service)
+        let photoViewModel = PhotoDetailViewModel(service: service)
+		let mainVC = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel)
 		let nav = UINavigationController(rootViewController: mainVC)
 		window.rootViewController = nav
 		self.window = window
@@ -30,6 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().shadowImage = UIImage()
         UIBarButtonItem.appearance().tintColor = .white
+//        UIBarButtonItem.appearance().cl
         UINavigationBar.appearance().isTranslucent = true
     }
     

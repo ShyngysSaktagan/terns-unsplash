@@ -11,9 +11,10 @@ import Alamofire
 
 class UnsplashService {
 	
-	func getSamplePhotos() {
+    func getSamplePhotos(page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
 		let params: Parameters = [
-			"client_id": UnsplashAPI.Stoken
+			"client_id": UnsplashAPI.Stoken,
+            "page" : page
 		]
 		AF.request(UnsplashAPI.baseURL + UnsplashAPI.photosPostfix, method: .get, parameters: params).response { (response) in
 			switch response.result {
@@ -23,7 +24,7 @@ class UnsplashService {
 					decoder.keyDecodingStrategy = .convertFromSnakeCase
 					do {
 						let photos = try decoder.decode([Photo].self, from: data!)
-						print(photos)
+						success(photos)                        
 					} catch {
 						debugPrint(error)
 					}
@@ -48,7 +49,7 @@ class UnsplashService {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     do {
                         let collection = try decoder.decode([Collection].self, from: data!)
-                        print(collection)
+//                        print(collection)
                         success(collection)
                     } catch {
                         debugPrint(error)
@@ -76,7 +77,58 @@ class UnsplashService {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     do {
                         let photos = try decoder.decode([Photo].self, from: data!)
-                        print(photos)
+//                        print(photos)
+                        success(photos)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func getUser(username: String, success: @escaping (User) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" , method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let user = try decoder.decode(User.self, from: data!)
+//                        print(photos)
+                        success(user)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func getUserPhotos(username: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "page": page
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
+            UnsplashAPI.photosPostfix , method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode([Photo].self, from: data!)
                         success(photos)
                     } catch {
                         debugPrint(error)

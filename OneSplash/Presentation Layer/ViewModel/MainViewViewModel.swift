@@ -13,6 +13,7 @@ class MainViewViewModel {
     var collections : [Collection] = []
     var page = 1
     var counting = 8
+    let constantCount = 8
     
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?

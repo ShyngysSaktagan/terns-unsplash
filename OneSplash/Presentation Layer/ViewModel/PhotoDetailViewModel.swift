@@ -11,18 +11,37 @@ import UIKit
 class PhotoDetailViewModel {
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
-
+    var page = 1
+    let constantCount = 8
+    var counting = 8
     var photos: [Photo] = []
     
     init(service: UnsplashService) {
         self.service = service
     }
     
-    func getPhotos(id: Int, totalPhotos: Int) {
+    func getCollectionPhotos(id: Int, totalPhotos: Int) {
         service.getPhotos(id: id, totalPhotos: totalPhotos, success: { [weak self]  data in
+            containerView.alpha = 0
+            containerView = nil
             self?.photos = data
             self?.didLoadTableItems?()
         }, failure: { error in
+            containerView.alpha = 0
+            containerView = nil
+            print(error)
+        })
+    }
+    
+    func getNewPhotos(page: Int) {
+        service.getSamplePhotos(page: page, success: { [weak self]  data in
+            containerView.alpha = 0
+            containerView = nil
+            self?.photos = data
+            self?.didLoadTableItems?()
+        }, failure: { error in
+            containerView.alpha = 0
+            containerView = nil
             print(error)
         })
     }

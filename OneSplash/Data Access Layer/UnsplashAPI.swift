@@ -14,4 +14,5 @@ struct UnsplashAPI {
     static let Stoken = "z16A9tIWDhQpo0gTcOkCm7ruRISrCXZED3-Ml8CUm1g"
 	static let photosPostfix = "/photos"
     static let collectionsPostfix = "/collections"
+    static let userPostfix = "/user"
 }

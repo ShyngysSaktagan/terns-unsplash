@@ -14,6 +14,11 @@ struct User: Codable {
     let username: String
 //    let firstName: String
 //    let lastName: String
+//    let portfolioUrl: String
+//    let location: String
+//    let totalCollections: Int
+//    let totalLikes: Int
+//    let totalPhotos: Int
     let profileImage: ProfileImage
 }
 
