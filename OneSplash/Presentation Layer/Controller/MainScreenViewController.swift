@@ -170,6 +170,23 @@ class MainScreenViewController: UIViewController {
 
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    //       let scrollViewHeight = scrollView.frame.height
+    //       let contentYoffset = scrollView.contentOffset.y
+    //       let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        
+        let offsetY         = scrollView.contentOffset.y
+        let contentHeight   = scrollView.contentSize.height
+        let height          = scrollView.frame.size.height
+        
+        if !photoViewModel.isRequestPerforming && offsetY > contentHeight - height {
+            photoViewModel.page += 1
+            showLoadingView()
+            fetchPhotos()
+            
+        }
+    }
 }
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
@@ -215,7 +232,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
             let item = photoViewModel.photos[indexPath.row]
             cell?.backgroundColor = UIColor( named: item.color!)
-            cell?.photoView.load(urlString: item.urls.small)
+            cell?.photoView.load(urlString: item.urls.thumb)
             cell?.authorLabel.text = item.user.name
             cell?.feedController1 = self 
             return cell!
@@ -276,7 +293,7 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
             mainViewViewModel.counting += mainViewViewModel.constantCount
         }
         cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)
-        cell?.imageView.load(urlString: item.coverPhoto.urls.small)
+        cell?.imageView.load(urlString: item.coverPhoto.urls.thumb)
         cell?.titleLabel.text = item.title
         return cell!
     }

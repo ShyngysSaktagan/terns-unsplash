@@ -163,7 +163,7 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? PhotosCell
         let item = viewModel.photos[indexPath.row]
         cell?.backgroundColor = UIColor( named: item.color!)
-        cell?.photoView.load(urlString: item.urls.small)
+        cell?.photoView.load(urlString: item.urls.thumb)
         cell?.authorLabel.text = item.user.name
         cell?.feedController2 = self
         return cell!

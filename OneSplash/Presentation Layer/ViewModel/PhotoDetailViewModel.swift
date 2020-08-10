@@ -15,6 +15,7 @@ class PhotoDetailViewModel {
     let constantCount = 8
     var counting = 8
     var photos: [Photo] = []
+    var isRequestPerforming = false
     
     init(service: UnsplashService) {
         self.service = service
@@ -34,10 +35,12 @@ class PhotoDetailViewModel {
     }
     
     func getNewPhotos(page: Int) {
+        isRequestPerforming = true
         service.getSamplePhotos(page: page, success: { [weak self]  data in
+            self?.isRequestPerforming = false
             containerView.alpha = 0
             containerView = nil
-            self?.photos = data
+            self?.photos.append(contentsOf: data)
             self?.didLoadTableItems?()
         }, failure: { error in
             containerView.alpha = 0

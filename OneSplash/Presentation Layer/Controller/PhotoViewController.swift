@@ -147,8 +147,8 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         print("current index scrolled -> \(indexPath.row), start photoVC from -> \(indexPathToScroll ?? 0)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         let item = photos[indexPath.row]
-        photoForShare?.load(urlString: item.urls.small)
-        cell?.imageView.load(urlString: item.urls.small)
+        photoForShare?.load(urlString: item.urls.thumb)
+        cell?.imageView.load(urlString: item.urls.thumb)
         photoAuthor.text = item.user.name
         indexPathToEnd = indexPath.row
         return cell!
