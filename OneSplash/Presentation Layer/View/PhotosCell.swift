@@ -10,27 +10,8 @@ import UIKit
 import SnapKit
 
 class PhotosCell: UITableViewCell {
-    
-    var feedController1: MainScreenViewController?
-    var feedController2: PhotoDetailViewController?
-    
-    @objc func animate() {
-        print("hello2")
-        guard feedController1 != nil else {
-            feedController2?.animate(photoView: photoView)
-            return
-        }
-        feedController1?.animate(photoView: photoView)
-    }
-    
-    let photoView: UIImageView = {
-        let photoView = UIImageView()
-        photoView.isUserInteractionEnabled = true
-        photoView.layer.masksToBounds = true
-//        photoView.clipsToBounds = true
-        photoView.contentMode = .scaleAspectFill
-        return photoView
-    }()
+
+    let photoView = UIImageView()
     
     let authorLabel : UILabel = {
         let label = UILabel()

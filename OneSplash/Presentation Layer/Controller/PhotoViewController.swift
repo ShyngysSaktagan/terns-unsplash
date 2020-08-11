@@ -16,15 +16,14 @@ protocol PhotoStarter {
 class PhotoViewController: UIViewController {
     
     var photos: [Photo]!
-    var onceOnly = false
     var indexPathToScroll: Int?
     var indexPathToEnd: Int?
     var photoStarterDelegate: PhotoStarter!
-    var photoForShare = UIImageView()
+    var onceOnly = false
+    var currentPhoto = UIImageView()
     
     let photoAuthor: UILabel = {
         let author = UILabel()
-        author.text = "Hello"
         author.font = .systemFont(ofSize: 20, weight: .black)
         author.textColor = .white
         author.textAlignment = .center
@@ -33,7 +32,7 @@ class PhotoViewController: UIViewController {
     
     let exitButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "arrow.down.right.and.arrow.up.left"), for: .normal)
+        button.setImage(UIImage(systemName: Symbols.exit), for: .normal)
         button.tintColor = .white
         button.addTarget(self, action: #selector(exit), for: .touchUpInside)
         return button
@@ -41,7 +40,7 @@ class PhotoViewController: UIViewController {
     
     let actionButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        button.setImage(UIImage(systemName: Symbols.share), for: .normal)
         button.tintColor = .white
         button.addTarget(self, action: #selector(share), for: .touchUpInside)
         return button
@@ -60,12 +59,12 @@ class PhotoViewController: UIViewController {
         button.addTarget(self, action: #selector(save), for: .touchUpInside)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.setImage(UIImage(systemName: "square.and.arrow.down"), for: .normal)
+        button.setImage(UIImage(systemName: Symbols.save), for: .normal)
         return button
     }()
     
     @objc func save() {
-        guard let imageToSave = photoForShare.image else {return }
+        guard let imageToSave = currentPhoto.image else {return }
         UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
     }
     
@@ -77,8 +76,7 @@ class PhotoViewController: UIViewController {
     }
     
     @objc func share() {
-        print("share")
-        let actionVC = UIActivityViewController(activityItems: [photoForShare.image!], applicationActivities: [])
+        let actionVC = UIActivityViewController(activityItems: [currentPhoto.image!], applicationActivities: [])
         present(actionVC, animated: true)
     }
     
@@ -87,7 +85,6 @@ class PhotoViewController: UIViewController {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "cell")
         return collectionView
     }()
@@ -96,9 +93,8 @@ class PhotoViewController: UIViewController {
         view.addSubview(saveButton)
         saveButton.snp.makeConstraints { make in
             make.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.width.height.equalTo(80)
+            make.width.height.equalTo(60)
         }
-        
         saveButton.layer.cornerRadius = saveButton.frame.size.height / 2.0
         saveButton.clipsToBounds = true
     }
@@ -142,11 +138,11 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("current index scrolled -> \(indexPath.row), start photoVC from -> \(indexPathToScroll ?? 0)")
+//        print("current index scrolled -> \(indexPath.row), start photoVC from -> \(indexPathToScroll ?? 0)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         let item = photos[indexPath.row]
         cell?.imageView.load(urlString: item.urls.thumb)
-        photoForShare.image = cell?.imageView.image
+        currentPhoto.image = cell?.imageView.image
         photoAuthor.text = item.user.name
         indexPathToEnd = indexPath.row
         return cell!

@@ -16,7 +16,8 @@
 		7E818EA824DB471900851D1D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E818EA724DB471900851D1D /* User.swift */; };
 		7E818EAC24DB5C3000851D1D /* PhotosCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E818EAB24DB5C3000851D1D /* PhotosCell.swift */; };
 		7E85BF3724DFF737003AC7D6 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E85BF3624DFF737003AC7D6 /* PhotoCell.swift */; };
-		7E85BF3924E19109003AC7D6 /* Snap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E85BF3824E19108003AC7D6 /* Snap.swift */; };
+		7E85BF3B24E237B1003AC7D6 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E85BF3A24E237B1003AC7D6 /* Labels.swift */; };
+		7E85BF3F24E24103003AC7D6 /* PhotoShowerViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E85BF3E24E24103003AC7D6 /* PhotoShowerViewControllers.swift */; };
 		7EE65C2C24DA225700362B7F /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE65C2B24DA225700362B7F /* ExploreCell.swift */; };
 		7EF5CDA424DE16F300222CA3 /* ExploreCellTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5CDA324DE16F300222CA3 /* ExploreCellTableCell.swift */; };
 		7EF5CDA624DF4D2800222CA3 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5CDA524DF4D2800222CA3 /* PhotoViewController.swift */; };
@@ -45,7 +46,8 @@
 		7E818EA724DB471900851D1D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7E818EAB24DB5C3000851D1D /* PhotosCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCell.swift; sourceTree = "<group>"; };
 		7E85BF3624DFF737003AC7D6 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
-		7E85BF3824E19108003AC7D6 /* Snap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snap.swift; sourceTree = "<group>"; };
+		7E85BF3A24E237B1003AC7D6 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
+		7E85BF3E24E24103003AC7D6 /* PhotoShowerViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoShowerViewControllers.swift; sourceTree = "<group>"; };
 		7EE65C2B24DA225700362B7F /* ExploreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
 		7EF5CDA324DE16F300222CA3 /* ExploreCellTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreCellTableCell.swift; sourceTree = "<group>"; };
 		7EF5CDA524DF4D2800222CA3 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +91,8 @@
 			children = (
 				7E6790BB24DA44F60076FABA /* Extensions.swift */,
 				7E6790C624DA6E8B0076FABA /* BetterSnappingLayout.swift */,
-				7E85BF3824E19108003AC7D6 /* Snap.swift */,
+				7E85BF3A24E237B1003AC7D6 /* Labels.swift */,
+				7E85BF3E24E24103003AC7D6 /* PhotoShowerViewControllers.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E85BF3F24E24103003AC7D6 /* PhotoShowerViewControllers.swift in Sources */,
 				9C07CB5F24D93FCA00DD39DF /* MainScreenViewController.swift in Sources */,
 				7E818EA424DB3DD500851D1D /* PhotoDetailViewController.swift in Sources */,
 				7E6790C324DA550E0076FABA /* MainViewViewModel.swift in Sources */,
@@ -357,13 +361,13 @@
 				7E818EA824DB471900851D1D /* User.swift in Sources */,
 				9C1E8F8C24D9833500AE44A8 /* Photo.swift in Sources */,
 				7EE65C2C24DA225700362B7F /* ExploreCell.swift in Sources */,
-				7E85BF3924E19109003AC7D6 /* Snap.swift in Sources */,
 				9C07CB5B24D93FCA00DD39DF /* AppDelegate.swift in Sources */,
 				7E818EA624DB3EB200851D1D /* PhotoDetailViewModel.swift in Sources */,
 				7E6790BC24DA44F60076FABA /* Extensions.swift in Sources */,
 				9C07CB5D24D93FCA00DD39DF /* SceneDelegate.swift in Sources */,
 				9C07CB6524D93FCA00DD39DF /* OneSplash.xcdatamodeld in Sources */,
 				7E85BF3724DFF737003AC7D6 /* PhotoCell.swift in Sources */,
+				7E85BF3B24E237B1003AC7D6 /* Labels.swift in Sources */,
 				7E6790C724DA6E8B0076FABA /* BetterSnappingLayout.swift in Sources */,
 				7EF5CDA624DF4D2800222CA3 /* PhotoViewController.swift in Sources */,
 				9C1E8F8524D97F0A00AE44A8 /* UnsplashService.swift in Sources */,
