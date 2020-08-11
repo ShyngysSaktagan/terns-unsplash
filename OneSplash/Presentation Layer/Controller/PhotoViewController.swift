@@ -20,7 +20,7 @@ class PhotoViewController: UIViewController {
     var indexPathToScroll: Int?
     var indexPathToEnd: Int?
     var photoStarterDelegate: PhotoStarter!
-    var photoForShare : UIImageView?
+    var photoForShare = UIImageView()
     
     let photoAuthor: UILabel = {
         let author = UILabel()
@@ -57,18 +57,16 @@ class PhotoViewController: UIViewController {
     
     let saveButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.addTarget(self, action: #selector(share), for: .touchUpInside)
+        button.addTarget(self, action: #selector(save), for: .touchUpInside)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.titleLabel?.textAlignment = .center
-        
-        button.translatesAutoresizingMaskIntoConstraints = true
         button.setImage(UIImage(systemName: "square.and.arrow.down"), for: .normal)
-        button.addTarget(self, action: #selector(save), for: .touchUpInside)
         return button
     }()
     
     @objc func save() {
+        guard let imageToSave = photoForShare.image else {return }
+        UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
     }
     
     @objc func exit() {
@@ -80,7 +78,7 @@ class PhotoViewController: UIViewController {
     
     @objc func share() {
         print("share")
-        let actionVC = UIActivityViewController(activityItems: [photoForShare?.image ?? ""], applicationActivities: [])
+        let actionVC = UIActivityViewController(activityItems: [photoForShare.image!], applicationActivities: [])
         present(actionVC, animated: true)
     }
     
@@ -147,8 +145,8 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         print("current index scrolled -> \(indexPath.row), start photoVC from -> \(indexPathToScroll ?? 0)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         let item = photos[indexPath.row]
-        photoForShare?.load(urlString: item.urls.thumb)
         cell?.imageView.load(urlString: item.urls.thumb)
+        photoForShare.image = cell?.imageView.image
         photoAuthor.text = item.user.name
         indexPathToEnd = indexPath.row
         return cell!
