@@ -17,6 +17,8 @@ class ExploreCellTableCell: UITableViewCell {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 8)
         collectionView.register(ExploreCell.self, forCellWithReuseIdentifier: "cell")
+        
+//        collectionView.automaticallyAdjustsScrollViewInsets = false
 
         return collectionView
     }()

@@ -140,7 +140,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
             let item = photoViewModel.photos[indexPath.row]
-            cell?.backgroundColor = UIColor( named: item.color!)
+            cell?.backgroundColor = UIColor( named: item.color ?? "")
             cell?.photoView.load(urlString: item.urls.thumb)
             cell?.authorLabel.text = item.user.name 
             return cell!
@@ -152,7 +152,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             return 215
         } else {
             let item = photoViewModel.photos[indexPath.row]
-            let imageCrop = CGFloat( item.width!) / CGFloat(item.height!)
+            let imageCrop = CGFloat( item.width) / CGFloat(item.height)
             return tableView.frame.width / imageCrop
         }
         
@@ -170,11 +170,13 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected indexPath to PhotoVC ->\(indexPath.row)")
+        let item = photoViewModel.photos[indexPath.row]
         let photoViewController = PhotoViewController()
         photoViewController.photos = photoViewModel.photos
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen
         photoViewController.photoStarterDelegate = self
+        photoViewController.photoAuthor.text = item.user.name
         present(photoViewController, animated: true)
     }
 }

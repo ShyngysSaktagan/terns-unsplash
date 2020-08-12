@@ -76,7 +76,7 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? PhotosCell
         let item = viewModel.photos[indexPath.row]
-        cell?.backgroundColor = UIColor( named: item.color!)
+        cell?.backgroundColor = UIColor( named: item.color ?? "")
         cell?.photoView.load(urlString: item.urls.thumb)
         cell?.authorLabel.text = item.user.name
         return cell!
@@ -84,7 +84,7 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = viewModel.photos[indexPath.row]
-        let imageCrop = CGFloat( item.width!) / CGFloat(item.height!)
+        let imageCrop = CGFloat(item.width) / CGFloat(item.height)
         return tableView.frame.width / imageCrop
     }
     

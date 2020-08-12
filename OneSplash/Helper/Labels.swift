@@ -12,4 +12,5 @@ enum Symbols {
     static let share = "square.and.arrow.up"
     static let save = "square.and.arrow.down"
     static let exit = "arrow.down.right.and.arrow.up.left"
+    static let info = "info.circle"
 }
