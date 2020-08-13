@@ -35,10 +35,8 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("start \(indexPathToStart ?? 0)")
         onceOnly = false
-        start(tableView: self.tableView)
-//        print("end")
+        start(tableView: self.tableView, section: 0)
     }
     
     private func bindViewModel() {
@@ -89,7 +87,11 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photoViewController = PhotoViewController()
+        let item = viewModel.photos[indexPath.row]
+        let service = UnsplashService()
+        let photoViewModel = PhotoViewModel(service: service)
+        let photoViewController = PhotoViewController(viewModel: photoViewModel)
+        photoViewController.photoAuthor.text = item.user.name
         photoViewController.photos = viewModel.photos
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen

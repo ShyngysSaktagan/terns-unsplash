@@ -18,11 +18,11 @@ class PhotoShowerViewControllers: UIViewController, PhotoStarter {
     var onceOnly = false
     var indexPathToStart: Int?
 
-    func start(tableView: UITableView) {
+    func start(tableView: UITableView, section: Int) {
         if !onceOnly {
-            let indexPath = IndexPath(row: indexPathToStart ?? 0, section: 1)
+            let indexPath = IndexPath(row: indexPathToStart ?? 0, section: section)
             if (tableView.numberOfSections > indexPath.section && tableView.numberOfRows(inSection: indexPath.section) > indexPath.row ) {
-                tableView.scrollToRow(at: IndexPath(row: indexPathToStart ?? 0, section: 1), at: .top, animated:false)
+                tableView.scrollToRow(at: IndexPath(row: indexPathToStart ?? 0, section: section), at: .top, animated:false)
             }
         }
     }

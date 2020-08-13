@@ -35,6 +35,30 @@ class UnsplashService {
 		}
 	}
     
+    func getPhoto(id: String, success: @escaping (Photo) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "id": id
+        ]
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.photosPostfix + "/\(id)", method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photo = try decoder.decode(Photo.self, from: data!)
+                        success(photo)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
     func getCollections(page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,

@@ -17,17 +17,21 @@ struct Photo: Codable, Identifiable {
 	let color: String?
 	let description: String?
     let exif: Exif?
-//	let altDescript ion: String?
+	let altDescript: String?
+    let location: Location?
 	let urls: PhotoURLs
     let user: User
-    
 }
 
 struct Exif: Codable {
-    let make: String
-    let model: String
-    let exposureTime: String
-    let aperture: String
-    let focalLength: Double
-    let iso: Int
+    let make: String?
+    let model: String?
+    let exposureTime: String?
+    let aperture: String?
+    let focalLength: String?
+    let iso: Int?
+}
+
+struct Location: Codable {
+    
 }

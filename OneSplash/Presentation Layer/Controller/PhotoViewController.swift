@@ -15,6 +15,7 @@ protocol PhotoStarter {
 
 class PhotoViewController: UIViewController {
     
+    let viewModel: PhotoViewModel
     var photos: [Photo]!
     var indexPathToScroll: Int?
     var indexPathToEnd: Int?
@@ -22,6 +23,15 @@ class PhotoViewController: UIViewController {
     var onceOnly = false
     var currentPhoto = UIImageView()
     let infoView = InfoView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: 350))
+    
+    init(viewModel: PhotoViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private var blackBackgroundView : UIView = {
         let black = UIView()
@@ -83,7 +93,6 @@ class PhotoViewController: UIViewController {
     }()
     
     @objc func showInfo() {
-        print("info")
         UIView.animate(withDuration: 0.4) { [weak self] in
             self?.infoView.transform = CGAffineTransform(translationX: 0, y: -350)
             self?.animationss()
@@ -188,6 +197,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         let item = photos[indexPath.row]
         cell?.imageView.load(urlString: item.urls.thumb)
+        infoView.addInfo(of: item)
         return cell!
     }
     
@@ -200,10 +210,18 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
         
         let item = photos[currentIndex]
-        infoView.addInfo(of: item)
+        fetchPhotoData(id: item.id)
+        guard let photoInfo = viewModel.photo else {
+            return
+        }
+        infoView.addInfo(of: photoInfo)
         currentPhoto.load(urlString: item.urls.small)
         photoAuthor.text = item.user.name
         indexPathToEnd = currentIndex
+    }
+    
+    func fetchPhotoData(id: String) {
+        viewModel.getPhoto(id: id)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -215,7 +233,6 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     @objc private func handlePanGasture(_ sender: UIPanGestureRecognizer) {
-        print("asdasdasa")
         switch sender.state {
         case .changed:
             let translation = sender.translation(in: infoView)
@@ -233,7 +250,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     @objc private func didTapDismissButton() {
-        print("adasdasdasd")
+
         UIView.animate(withDuration: 0.4, animations: { [weak self] in
             self?.infoView.transform = .identity
             self?.blackBackgroundView.alpha = 0

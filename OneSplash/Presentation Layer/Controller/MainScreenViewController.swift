@@ -38,10 +38,8 @@ class MainScreenViewController: PhotoShowerViewControllers {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("start MainVC from -> \(indexPathToStart ?? 0)")
         onceOnly = false
-        start(tableView: self.tableView)
-//        print("end")
+        start(tableView: self.tableView, section: 1)
     }
     
     func configureTableView() {
@@ -169,9 +167,10 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected indexPath to PhotoVC ->\(indexPath.row)")
         let item = photoViewModel.photos[indexPath.row]
-        let photoViewController = PhotoViewController()
+        let service = UnsplashService()
+        let viewModel = PhotoViewModel(service: service)
+        let photoViewController = PhotoViewController(viewModel: viewModel)
         photoViewController.photos = photoViewModel.photos
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen
@@ -197,7 +196,6 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ExploreCell
         let item = mainViewViewModel.collections[indexPath.row]
         if (indexPath.row+1) / mainViewViewModel.counting == 1 {
-            print("hello")
             mainViewViewModel.page += 1
             mainViewViewModel.getCollections(page: mainViewViewModel.page)
             mainViewViewModel.counting += mainViewViewModel.constantCount
