@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E09C71824E5909000764C09 /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E09C71724E5909000764C09 /* PhotoViewModel.swift */; };
+		7E09C71A24E6190700764C09 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E09C71924E6190700764C09 /* MapView.swift */; };
 		7E6790BC24DA44F60076FABA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6790BB24DA44F60076FABA /* Extensions.swift */; };
 		7E6790C024DA4F400076FABA /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6790BF24DA4F3F0076FABA /* Collection.swift */; };
 		7E6790C324DA550E0076FABA /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6790C224DA550E0076FABA /* MainViewViewModel.swift */; };
@@ -43,6 +44,7 @@
 		557F2207D3FF3C5286C6222E /* Pods_OneSplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68740E3173C4B9F0130213B5 /* Pods-OneSplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSplash.debug.xcconfig"; path = "Target Support Files/Pods-OneSplash/Pods-OneSplash.debug.xcconfig"; sourceTree = "<group>"; };
 		7E09C71724E5909000764C09 /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
+		7E09C71924E6190700764C09 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		7E6790BB24DA44F60076FABA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7E6790BF24DA4F3F0076FABA /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		7E6790C224DA550E0076FABA /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				7E85BF4A24E34609003AC7D6 /* TitleLabel.swift */,
 				7E85BF4C24E34618003AC7D6 /* SubTitleLabel.swift */,
 				7E85BF4E24E34625003AC7D6 /* VerticalStackView.swift */,
+				7E09C71924E6190700764C09 /* MapView.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 				9C07CB5D24D93FCA00DD39DF /* SceneDelegate.swift in Sources */,
 				9C07CB6524D93FCA00DD39DF /* OneSplash.xcdatamodeld in Sources */,
 				7E85BF3724DFF737003AC7D6 /* PhotoCell.swift in Sources */,
+				7E09C71A24E6190700764C09 /* MapView.swift in Sources */,
 				7E85BF3B24E237B1003AC7D6 /* Labels.swift in Sources */,
 				7E6790C724DA6E8B0076FABA /* BetterSnappingLayout.swift in Sources */,
 				7E85BF4B24E34609003AC7D6 /* TitleLabel.swift in Sources */,

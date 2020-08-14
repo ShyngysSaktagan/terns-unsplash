@@ -22,7 +22,7 @@ class PhotoViewController: UIViewController {
     var photoStarterDelegate: PhotoStarter!
     var onceOnly = false
     var currentPhoto = UIImageView()
-    let infoView = InfoView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: 350))
+    let infoView = InfoView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: 800))
     
     init(viewModel: PhotoViewModel) {
         self.viewModel = viewModel
@@ -94,7 +94,7 @@ class PhotoViewController: UIViewController {
     
     @objc func showInfo() {
         UIView.animate(withDuration: 0.4) { [weak self] in
-            self?.infoView.transform = CGAffineTransform(translationX: 0, y: -350)
+            self?.infoView.transform = CGAffineTransform(translationX: 0, y: -InfoView.height)
             self?.animationss()
         }
     }
@@ -107,7 +107,7 @@ class PhotoViewController: UIViewController {
     @objc func exit() {
         self.photoStarterDelegate.startAt(indexPath: self.indexPathToEnd ?? 0)
         dismiss(animated: true) {
-            print(self.indexPathToEnd ?? 0)
+//            print(self.indexPathToEnd ?? 0)
         }
     }
     

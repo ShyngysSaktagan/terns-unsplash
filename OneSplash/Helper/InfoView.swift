@@ -10,6 +10,8 @@ import UIKit
 
 class InfoView: UIView {
     
+    static var height: CGFloat = 350
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -25,6 +27,8 @@ class InfoView: UIView {
         self.layer.cornerRadius = 20
         self.backgroundColor = .bcc
     }
+    
+    let mapView = MapView()
      
     let makeLabel           = TitleLabel(textAlignment: .right, fontSize: 15, text: "Make")
     let modelLabel          = TitleLabel(textAlignment: .right, fontSize: 15, text: "Model")
@@ -94,8 +98,15 @@ class InfoView: UIView {
     }()
     
     private var infoLabel = TitleLabel(textAlignment: .center, fontSize: 16, weight: .bold ,text: "Info")
+    private var descriptionLabel = SubTitleLabel(textAlignment: .left, text: "Description")
     
     private var line : UIView = {
+        let line = UIView()
+        line.backgroundColor = .white
+        return line
+    }()
+    
+    private var line2 : UIView = {
         let line = UIView()
         line.backgroundColor = .white
         return line
@@ -105,7 +116,11 @@ class InfoView: UIView {
         self.addSubview(dismissButton)
         self.addSubview(infoLabel)
         self.addSubview(line)
+        self.addSubview(descriptionLabel)
+        self.addSubview(line2)
         self.addSubview(mainVertivalStackView)
+        self.addSubview(mapView)
+        self.layoutIfNeeded()
         
         dismissButton.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(10)
@@ -120,13 +135,20 @@ class InfoView: UIView {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(0.5)
         }
-        
-        mainVertivalStackView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
+        descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(line.snp.bottom).offset(20)
-            make.height.equalToSuperview().offset(-70)
+            make.leading.trailing.equalToSuperview().inset(20)
         }
-
+        mapView.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(200)
+        }
+        line2.snp.makeConstraints { make in
+            make.top.equalTo(mapView.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(1)
+        }
     }
     
     func addInfo(of photo: Photo) {
@@ -148,7 +170,101 @@ class InfoView: UIView {
             self.isoSubLabel.text  = "\(aperture)"
         } else { self.isoSubLabel.text = "-" }
         
+        self.descriptionLabel.text      = photo.description ?? "none"
         self.dimensionsSubLabel.text    = "\(photo.width) x \(photo.height)"
         self.publishedSubLabel.text     = photo.createdAt.convertToDisplayFormat()
+        self.mapView.addLocation(photoLocation: photo)
+        
+        print("asdadasdasdadasdasdasd")
+        print("asdadasdasdadasdasdasd")
+        print("asdadasdasdadasdasdasd")
+        print("asdadasdasdadasdasdasd")
+        print("\(mapView.latitude)       \(mapView.longitude)")
+        
+        if descriptionLabel.text == "none" {
+            line2.removeFromSuperview()
+            descriptionLabel.removeFromSuperview()
+            mainVertivalStackView.removeFromSuperview()
+            if mapView.latitude == nil && mapView.longitude == nil {
+                mapView.removeFromSuperview()
+                addSubview(mainVertivalStackView)
+                mainVertivalStackView.snp.makeConstraints { make in
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.top.equalTo(line.snp.bottom).offset(20)
+                    make.height.equalToSuperview().offset(-70)
+                }
+                InfoView.height = 350
+            } else {
+                mapView.removeFromSuperview()
+                addSubview(mapView)
+                addSubview(mainVertivalStackView)
+                addSubview(line2)
+                mapView.snp.makeConstraints { make in
+                    make.top.equalTo(line.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalTo(200)
+                }
+                line2.snp.makeConstraints { make in
+                    make.top.equalTo(mapView.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalTo(1)
+                }
+                mainVertivalStackView.snp.makeConstraints { make in
+                    make.top.equalTo(line2.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalToSuperview().offset(-70)
+                }
+                InfoView.height = 550
+            }
+            
+        } else {
+            for view in [line2, descriptionLabel, mainVertivalStackView] {
+                view.removeFromSuperview()
+                addSubview(view)
+            }
+            if mapView.latitude == nil && mapView.longitude == nil {
+                mapView.removeFromSuperview()
+                descriptionLabel.snp.makeConstraints { make in
+                    make.top.equalTo(line.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                }
+                line2.snp.makeConstraints { make in
+                    make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalTo(1)
+                }
+                mainVertivalStackView.snp.makeConstraints { make in
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.top.equalTo(line2.snp.bottom).offset(20)
+                    make.height.equalToSuperview().offset(-70)
+                }
+                InfoView.height = 400
+            } else {
+                mapView.removeFromSuperview()
+                addSubview(mapView)
+                descriptionLabel.snp.makeConstraints { make in
+                    make.top.equalTo(line.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                }
+                mapView.snp.makeConstraints { make in
+                    make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalTo(200)
+                }
+                line2.snp.makeConstraints { make in
+                    make.top.equalTo(mapView.snp.bottom).offset(20)
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.height.equalTo(1)
+                }
+                mainVertivalStackView.snp.makeConstraints { make in
+                    make.leading.trailing.equalToSuperview().inset(20)
+                    make.top.equalTo(line2.snp.bottom).offset(20)
+                    make.height.equalToSuperview().offset(-70)
+                }
+                InfoView.height = 600
+            }
+           
+        }
     }
+    
 }
