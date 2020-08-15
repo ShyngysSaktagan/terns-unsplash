@@ -16,6 +16,8 @@ class MainScreenViewController: PhotoShowerViewControllers {
     let photoViewModel : PhotoDetailViewModel
     let tableView = UITableView()
     let sectionTypes   = [ "Explore", "New" ]
+    var currentIndex: Int?
+    var user: String?
     
     init(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel) {
         self.mainViewViewModel = mainViewViewModel
@@ -71,11 +73,13 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     func fetchCollections() {
-        mainViewViewModel.getCollections(page: mainViewViewModel.page)
+//        mainViewViewModel.getCollections(page: mainViewViewModel.page)
+        mainViewViewModel.getCollections()
     }
     
     func fetchPhotos() {
-        photoViewModel.getNewPhotos(page: photoViewModel.page)
+//        photoViewModel.getNewPhotos(page: photoViewModel.page)
+        photoViewModel.getNewPhotos()
     }
     
     let zoomImageView = UIImageView()
@@ -138,11 +142,21 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
             let item = photoViewModel.photos[indexPath.row]
+            self.currentIndex = indexPath.row
             cell?.backgroundColor = UIColor( named: item.color ?? "")
             cell?.photoView.load(urlString: item.urls.thumb)
-            cell?.authorLabel.text = item.user.name 
+            cell?.button.setTitle(item.user.username, for: .normal)
+            cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             return cell!
         }
+    }
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        let service = UnsplashService()
+        let viewModel = ProfileViewModel(service: service, username: username)
+        let profileVC = ProfileViewController(viewModel: viewModel)
+        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -166,6 +180,10 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func showUser() {
+        
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = photoViewModel.photos[indexPath.row]
         let service = UnsplashService()
@@ -175,7 +193,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen
         photoViewController.photoStarterDelegate = self
-        photoViewController.photoAuthor.text = item.user.name
+        photoViewController.prifileName.text = item.user.name
         present(photoViewController, animated: true)
     }
 }
@@ -197,7 +215,8 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
         let item = mainViewViewModel.collections[indexPath.row]
         if (indexPath.row+1) / mainViewViewModel.counting == 1 {
             mainViewViewModel.page += 1
-            mainViewViewModel.getCollections(page: mainViewViewModel.page)
+//            mainViewViewModel.getCollections(page: mainViewViewModel.page)
+            mainViewViewModel.getCollections()
             mainViewViewModel.counting += mainViewViewModel.constantCount
         }
         cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)

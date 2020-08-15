@@ -33,6 +33,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIBarButtonItem.appearance().tintColor = .white
 //        UIBarButtonItem.appearance().cl
         UINavigationBar.appearance().isTranslucent = true
+        
+        UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+
     }
     
 	func sceneDidDisconnect(_ scene: UIScene) {

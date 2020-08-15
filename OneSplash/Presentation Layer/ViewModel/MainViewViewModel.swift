@@ -22,7 +22,7 @@ class MainViewViewModel {
         self.service = service
     }
     
-    func getCollections(page: Int) {
+    func getCollections() {
         service.getCollections(page: page, success: { [weak self]  data in
             self?.collections.append(contentsOf: data)
             self?.didLoadTableItems?()

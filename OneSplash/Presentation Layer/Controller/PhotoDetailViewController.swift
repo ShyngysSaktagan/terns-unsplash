@@ -76,7 +76,7 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let item = viewModel.photos[indexPath.row]
         cell?.backgroundColor = UIColor( named: item.color ?? "")
         cell?.photoView.load(urlString: item.urls.thumb)
-        cell?.authorLabel.text = item.user.name
+        cell?.button.setTitle(item.user.name, for: .normal)
         return cell!
     }
     
@@ -91,7 +91,7 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let service = UnsplashService()
         let photoViewModel = PhotoViewModel(service: service)
         let photoViewController = PhotoViewController(viewModel: photoViewModel)
-        photoViewController.photoAuthor.text = item.user.name
+        photoViewController.prifileName.text = item.user.name
         photoViewController.photos = viewModel.photos
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen

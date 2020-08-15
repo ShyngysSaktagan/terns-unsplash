@@ -40,13 +40,19 @@ class PhotoViewController: UIViewController {
         return black
     }()
     
-    let photoAuthor: UILabel = {
+    let prifileName: UILabel = {
         let author = UILabel()
         author.font = .systemFont(ofSize: 20, weight: .black)
         author.textColor = .white
         author.textAlignment = .center
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        author.addGestureRecognizer(tapGesture)
         return author
     }()
+    
+    @objc private func handleTap() {
+        print("show me ")
+    }
     
     let exitButton: UIButton = {
         let button = UIButton()
@@ -65,7 +71,7 @@ class PhotoViewController: UIViewController {
     }()
     
     lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [exitButton, photoAuthor, actionButton])
+        let stackView = UIStackView(arrangedSubviews: [exitButton, prifileName, actionButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalSpacing
@@ -170,7 +176,6 @@ class PhotoViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.collectionViewLayout.invalidateLayout()
-//        collectionView.isPagingEnabled = true
     }
     
     func configureStackView() {
@@ -216,7 +221,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
         infoView.addInfo(of: photoInfo)
         currentPhoto.load(urlString: item.urls.small)
-        photoAuthor.text = item.user.name
+        prifileName.text = item.user.name
         indexPathToEnd = currentIndex
     }
     

@@ -34,7 +34,7 @@ class PhotoDetailViewModel {
         })
     }
     
-    func getNewPhotos(page: Int) {
+    func getNewPhotos() {
         isRequestPerforming = true
         service.getSamplePhotos(page: page, success: { [weak self]  data in
             self?.isRequestPerforming = false

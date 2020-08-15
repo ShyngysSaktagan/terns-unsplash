@@ -19,16 +19,16 @@ class TitleLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(textAlignment: NSTextAlignment, fontSize: CGFloat, weight: UIFont.Weight = .light ,text: String) {
+    init(textAlignment: NSTextAlignment, fontSize: CGFloat, weight: UIFont.Weight = .light ,text: String = "", color: UIColor = .white) {
         super.init(frame: .zero)
         self.textAlignment = textAlignment
         self.text = text
         self.font = .systemFont(ofSize: fontSize, weight: weight)
+        self.textColor = color
         configure()
     }
     
     private func configure() {
-        textColor                   = .white
         adjustsFontSizeToFitWidth   = true
         minimumScaleFactor          = 0.9
         lineBreakMode               = .byTruncatingTail

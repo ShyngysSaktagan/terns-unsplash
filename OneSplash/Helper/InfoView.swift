@@ -175,12 +175,6 @@ class InfoView: UIView {
         self.publishedSubLabel.text     = photo.createdAt.convertToDisplayFormat()
         self.mapView.addLocation(photoLocation: photo)
         
-        print("asdadasdasdadasdasdasd")
-        print("asdadasdasdadasdasdasd")
-        print("asdadasdasdadasdasdasd")
-        print("asdadasdasdadasdasdasd")
-        print("\(mapView.latitude)       \(mapView.longitude)")
-        
         if descriptionLabel.text == "none" {
             line2.removeFromSuperview()
             descriptionLabel.removeFromSuperview()

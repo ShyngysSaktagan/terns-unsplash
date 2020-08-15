@@ -13,13 +13,13 @@ class PhotosCell: UITableViewCell {
 
     let photoView = UIImageView()
     
-    let authorLabel : UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .heavy)
-        label.textColor = .white
-        return label
+    let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .heavy)
+        return button
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -30,14 +30,12 @@ class PhotosCell: UITableViewCell {
     }
     
     func setupUI() {
-//        photoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animate)))
-        
         contentView.addSubview(photoView)
         photoView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        contentView.addSubview(authorLabel)
-        authorLabel.snp.makeConstraints { make in
+        contentView.addSubview(button)
+        button.snp.makeConstraints { make in
             make.bottom.leading.equalToSuperview().inset(16)
         }
     }
