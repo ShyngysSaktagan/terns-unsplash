@@ -15,7 +15,7 @@ class PhotosCell: UITableViewCell {
     
     let button: UIButton = {
         let button = UIButton(type: .system)
-        button.titleLabel?.textColor = .white
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .heavy)
         return button
     }()
@@ -27,6 +27,12 @@ class PhotosCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+//        photoView.image = nil
+//        authorLabel.text = nil
     }
     
     func setupUI() {

@@ -11,11 +11,7 @@ import UIKit
 class PhotoViewModel {
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
-    var page = 1
-    let constantCount = 8
-    var counting = 8
     var photo: Photo?
-    var isRequestPerforming = false
     
     init(service: UnsplashService) {
         self.service = service
@@ -25,7 +21,7 @@ class PhotoViewModel {
         service.getPhoto(id: id, success: { [weak self]  data in
             self?.photo = data
             self?.didLoadTableItems?()
-//            print(self?.photo ?? "")
+            print(self?.photo ?? "")
         }, failure: { error in
             print(error)
         })

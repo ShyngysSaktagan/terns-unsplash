@@ -40,14 +40,29 @@ class PhotoViewController: UIViewController {
         return black
     }()
     
-    let prifileName: UILabel = {
-        let author = UILabel()
-        author.font = .systemFont(ofSize: 20, weight: .black)
-        author.textColor = .white
-        author.textAlignment = .center
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        author.addGestureRecognizer(tapGesture)
-        return author
+//        cell?.button.setTitle(item.user.username, for: .normal)
+//        cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+//        return cell!
+//    }
+//}
+//
+    @objc private func didTapNumber(_ sender: UIButton) {
+        print("hello")
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        let service = UnsplashService()
+        let viewModel = ProfileViewModel(service: service, username: username)
+        let profileVC = ProfileViewController(viewModel: viewModel)
+//        dismiss(animated: false, completion: nil)
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    let prifileName: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .black)
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+        return button
     }()
     
     @objc private func handleTap() {
@@ -201,7 +216,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         let item = photos[indexPath.row]
-        cell?.imageView.load(urlString: item.urls.thumb)
+        cell?.imageView.load(urlString: item.urls.small)
         infoView.addInfo(of: item)
         return cell!
     }
@@ -213,20 +228,21 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 currentIndex = indexPath.dropFirst()[0]
             }
         }
-        
+
         let item = photos[currentIndex]
+        prifileName.setTitle(item.user.name, for: .normal) 
+        currentPhoto.load(urlString: item.urls.small)
+        indexPathToEnd = currentIndex
         fetchPhotoData(id: item.id)
         guard let photoInfo = viewModel.photo else {
             return
         }
         infoView.addInfo(of: photoInfo)
-        currentPhoto.load(urlString: item.urls.small)
-        prifileName.text = item.user.name
-        indexPathToEnd = currentIndex
     }
     
     func fetchPhotoData(id: String) {
         viewModel.getPhoto(id: id)
+//        infoView.addInfo(of: viewModel.photo ?? )
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -277,7 +293,6 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
                        initialSpringVelocity: 0.5, options: .curveEaseOut, animations: { () -> Void in
             self.blackBackgroundView.alpha = 0.5
             }, completion: nil)
-        
     }
     
     @objc func zoomOut() {

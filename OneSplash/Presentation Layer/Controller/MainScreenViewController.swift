@@ -143,8 +143,8 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
             let item = photoViewModel.photos[indexPath.row]
             self.currentIndex = indexPath.row
-            cell?.backgroundColor = UIColor( named: item.color ?? "")
-            cell?.photoView.load(urlString: item.urls.thumb)
+            cell?.backgroundColor = UIColor(hexString: item.color!)
+            cell?.photoView.load(urlString: item.urls.small)
             cell?.button.setTitle(item.user.username, for: .normal)
             cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             return cell!
@@ -180,10 +180,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func showUser() {
-        
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = photoViewModel.photos[indexPath.row]
         let service = UnsplashService()
@@ -193,7 +189,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         photoViewController.indexPathToScroll = indexPath.row
         photoViewController.modalPresentationStyle = .fullScreen
         photoViewController.photoStarterDelegate = self
-        photoViewController.prifileName.text = item.user.name
+        photoViewController.prifileName.setTitle(item.user.name, for: .normal)
         present(photoViewController, animated: true)
     }
 }
@@ -219,8 +215,11 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
             mainViewViewModel.getCollections()
             mainViewViewModel.counting += mainViewViewModel.constantCount
         }
-        cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)
-        cell?.imageView.load(urlString: item.coverPhoto.urls.thumb)
+        
+        cell?.backgroundColor = UIColor(hexString: item.coverPhoto.color!)
+        cell?.layer.cornerRadius = 12
+//        cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)
+        cell?.imageView.load(urlString: item.coverPhoto.urls.small)
         cell?.titleLabel.text = item.title
         return cell!
     }

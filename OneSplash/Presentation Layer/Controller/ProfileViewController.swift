@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: PhotoShowerViewControllers {
     
     let viewModel: ProfileViewModel
     
@@ -18,6 +18,7 @@ class ProfileViewController: UIViewController {
     }
     
     func fetchViewModelDatas() {
+//        showTableLoadView(in: self.tableView)
         viewModel.getUser()
         viewModel.getUserLikes()
         viewModel.getUserPhotos()
@@ -28,6 +29,12 @@ class ProfileViewController: UIViewController {
         viewModel.didLoadTableItems = { [weak self] in
             self?.tableView.reloadData()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        onceOnly = false
+        start(tableView: self.tableView, section: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -122,31 +129,65 @@ class ProfileViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
+    func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
+        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
+        emptyStateView.tag = tag
+        emptyStateView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height)
+        emptyStateView.isUserInteractionEnabled = true
+        view.addSubview(emptyStateView)
+    }
+    
+    func removeSubViews(tags: [Int]) {
+        for tag in tags {
+            if let viewWithTag = tableView.viewWithTag(tag) {
+                viewWithTag.removeFromSuperview()
+            }
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        removeSubViews(tags: [100,101,102])
         switch segmentController.selectedSegmentIndex {
         case 0:
-            if viewModel.collections.isEmpty {
+            if viewModel.photos.isEmpty {
                 let message = "No photos"
-                self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView)
+                self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView, tag: 100)
             }
+//            showTableLoadView(in: self.tableView))
             return viewModel.photos.count
         case 1:
-            if viewModel.collections.isEmpty {
+            if viewModel.likes.isEmpty {
                 let message = "No likes"
-                self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView)
+                self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView, tag: 101)
             }
+//            showTableLoadView(in: self.tableView)
             return viewModel.likes.count
         case 2:
             if viewModel.collections.isEmpty {
                 let message = "No collections"
-                self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView)
+//                removeSubViews(tags: [0,1,2])
+                self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
             }
+//            showTableLoadView(in: self.tableView)
             return viewModel.collections.count
         default:
             return 0
+        }
+    }
+    
+    func checkLabels() {
+        if userlocationLabel.text == nil {
+            userLocationStackView.removeFromSuperview()
+            tableView.removeFromSuperview()
+            view.addSubview(tableView)
+            tableView.snp.makeConstraints { make in
+                make.top.equalTo(usernameLabel.snp.bottom).offset(10)
+                make.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
         }
     }
     
@@ -155,30 +196,36 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         userPicture.load(urlString: viewModel.user?.profileImage?.medium ?? "")
         usernameLabel.text = viewModel.user?.name
         userlocationLabel.text = viewModel.user?.location
-        userURL.text = viewModel.user?.portfolioUrl
-        
+//        userURL.text = viewModel.user?.portfolioUrl
+        checkLabels()
         switch segmentController.selectedSegmentIndex {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
             let item = viewModel.photos[indexPath.row]
-            cell?.imageView?.load(urlString: item.urls.small)
+            cell?.imageView?.load(urlString: item.urls.regular)
+            cell?.imageView?.contentMode = .scaleAspectFill
+            cell?.imageView?.image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: -10, right: 0))
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
             return cell!
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "likes", for: indexPath) as? PhotosCell
             let item = viewModel.likes[indexPath.row]
-            cell?.imageView?.load(urlString: item.urls.small)
+            cell?.imageView?.load(urlString: item.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
+//            tableContainerView.alpha = 0
+            tableContainerView = nil
             return cell!
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell
             let item = viewModel.collections[indexPath.row]
             cell?.titleLabel.text = item.title
-            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.small)
+            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
+//            tableContainerView.alpha = 0
+            tableContainerView = nil
             return cell!
         default:
             return UITableViewCell()
@@ -186,7 +233,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         switch segmentController.selectedSegmentIndex {
         case 0:
             let item = viewModel.photos[indexPath.row]
@@ -219,9 +265,36 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         return headerView
     }
     
-    func showEmptyStateView(with message: String, image: String, in view: UIView) {
-        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
-        emptyStateView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: view.frame.height)
-        view.addSubview(emptyStateView)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let service = UnsplashService()
+        let photoViewModel = PhotoViewModel(service: service)
+        let photoViewController = PhotoViewController(viewModel: photoViewModel)
+        switch segmentController.selectedSegmentIndex {
+        case 0:
+            let item = viewModel.photos[indexPath.row]
+            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
+            photoViewController.photos = viewModel.photos
+            photoViewController.indexPathToScroll = indexPath.row
+            photoViewController.modalPresentationStyle = .fullScreen
+            photoViewController.photoStarterDelegate = self
+            present(photoViewController, animated: true)
+        case 1:
+            let item = viewModel.likes[indexPath.row]
+            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
+            photoViewController.photos = viewModel.likes
+            photoViewController.indexPathToScroll = indexPath.row
+            photoViewController.modalPresentationStyle = .fullScreen
+            photoViewController.photoStarterDelegate = self
+            present(photoViewController, animated: true)
+        case 2:
+            let photoDetailViewModel = PhotoDetailViewModel(service: service)
+            let photoDetailViewController = PhotoDetailViewController(viewModel: photoDetailViewModel)
+            let item = viewModel.collections[indexPath.row]
+            photoDetailViewController.collection = item
+            photoDetailViewController.title = item.title
+            navigationController?.pushViewController(photoDetailViewController, animated: true)
+        default:
+            print("sd")
+        }
     }
 }
