@@ -200,7 +200,6 @@ class UnsplashService {
             "client_id": UnsplashAPI.Stoken,
             "username": username
         ]
-        
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
             UnsplashAPI.collectionsPostfix , method: .get, parameters: params).response { (response) in
             switch response.result {
@@ -213,6 +212,87 @@ class UnsplashService {
                         print("Collections")
                         print(photos)
                         success(photos)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    
+    
+    
+    func searchPhotos(query: String, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "query": query
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.photosPostfix,
+                   method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode(PhotoResults.self, from: data!)
+                        success(photos.results)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func searchCollections(query: String, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "query": query
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.collectionsPostfix,
+                   method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode(CollectionResults.self, from: data!)
+                        success(photos.results)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
+    func searchUsers(query: String, success: @escaping ([User]) -> Void, failure: @escaping (AFError) -> Void) {
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
+            "query": query
+        ]
+        
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.userPostfix,
+                   method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode(UserResults.self, from: data!)
+                        success(photos.results)
                     } catch {
                         debugPrint(error)
                     }

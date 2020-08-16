@@ -11,23 +11,36 @@ import SnapKit
 import NVActivityIndicatorView
 
 class MainScreenViewController: PhotoShowerViewControllers {
-    
+        
     let mainViewViewModel : MainViewViewModel
     let photoViewModel : PhotoDetailViewModel
+    let searchViewModel: SearchViewModel
     let tableView = UITableView()
     let sectionTypes   = [ "Explore", "New" ]
     var currentIndex: Int?
     var user: String?
+    var searchViewController : SearchViewController
     
-    init(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel) {
+    init(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel, searchViewModel: SearchViewModel) {
         self.mainViewViewModel = mainViewViewModel
         self.photoViewModel = photoViewModel
+        self.searchViewModel = searchViewModel
+        
+        searchViewController = SearchViewController(viewModel: self.searchViewModel)
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: searchViewController)
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.searchBar.delegate = searchViewController
+//        searchController.delegate = self
+        return searchController
+    }()
     
     private func bindViewModel() {
         mainViewViewModel.didLoadTableItems = { [weak self] in
@@ -60,10 +73,16 @@ class MainScreenViewController: PhotoShowerViewControllers {
     override func viewDidLoad() {
         view.backgroundColor = .bcc
         super.viewDidLoad()
-        
+        setupNavigationBar()
         configureTableView()
         fetchAll()
         bindViewModel()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
     }
     
     func fetchAll() {

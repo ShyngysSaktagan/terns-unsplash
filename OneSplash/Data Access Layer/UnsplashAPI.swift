@@ -15,4 +15,5 @@ struct UnsplashAPI {
     static let collectionsPostfix = "/collections"
     static let userPostfix = "/users"
     static let likesPostfix = "/likes"
+    static let searchPostfix = "/search"
 }

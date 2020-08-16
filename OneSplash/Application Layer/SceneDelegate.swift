@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let service = UnsplashService()
         let mainViewViewModel = MainViewViewModel(service: service)
         let photoViewModel = PhotoDetailViewModel(service: service)
-		let mainVC = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel)
+        let searchViewModel = SearchViewModel(service: service)
+        let mainVC = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
 		let nav = UINavigationController(rootViewController: mainVC)
 		window.rootViewController = nav
 		self.window = window
