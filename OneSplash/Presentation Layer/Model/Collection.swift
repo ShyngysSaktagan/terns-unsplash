@@ -13,4 +13,5 @@ struct Collection: Codable, Identifiable {
     let title: String
     let coverPhoto: Photo
     let totalPhotos : Int
+    let links: Links?
 }

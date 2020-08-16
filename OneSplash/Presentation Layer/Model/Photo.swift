@@ -21,6 +21,7 @@ struct Photo: Codable, Identifiable {
     let location: Location?
 	let urls: PhotoURLs
     let user: User
+    let links: Links?
 }
 
 struct Exif: Codable {

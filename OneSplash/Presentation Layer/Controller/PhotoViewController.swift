@@ -40,12 +40,12 @@ class PhotoViewController: UIViewController {
         return black
     }()
     
-//        cell?.button.setTitle(item.user.username, for: .normal)
-//        cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
-//        return cell!
-//    }
-//}
-//
+    private func bindViewModel() {
+        viewModel.didLoadTableItems = { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+
     @objc private func didTapNumber(_ sender: UIButton) {
         print("hello")
         let username = (sender.titleLabel?.text ?? "").lowercased()
@@ -53,7 +53,8 @@ class PhotoViewController: UIViewController {
         let viewModel = ProfileViewModel(service: service, username: username)
         let profileVC = ProfileViewController(viewModel: viewModel)
 //        dismiss(animated: false, completion: nil)
-        navigationController?.pushViewController(profileVC, animated: true)
+        
+        super.navigationController?.pushViewController(profileVC, animated: true)
     }
     
     let prifileName: UIButton = {
@@ -133,7 +134,7 @@ class PhotoViewController: UIViewController {
     }
     
     @objc func share() {
-        let actionVC = UIActivityViewController(activityItems: [currentPhoto.image!], applicationActivities: [])
+        let actionVC = UIActivityViewController(activityItems: [viewModel.photo?.links?.html ?? ""], applicationActivities: [])
         present(actionVC, animated: true)
     }
     
@@ -172,7 +173,6 @@ class PhotoViewController: UIViewController {
         configureSaveButton()
         configureInfoButton()
         configureInfoView()
-        
     }
     
     func configureInfoView() {
@@ -215,6 +215,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
+        
         let item = photos[indexPath.row]
         cell?.imageView.load(urlString: item.urls.small)
         infoView.addInfo(of: item)

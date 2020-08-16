@@ -31,8 +31,8 @@ class PhotosCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        photoView.image = nil
-//        authorLabel.text = nil
+        photoView.image = nil
+        button.titleLabel?.text = nil
     }
     
     func setupUI() {

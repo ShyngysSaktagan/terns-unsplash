@@ -27,10 +27,16 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .bcc
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
         configureNavBar()
         configureTableView()
         fetchCollections()
         bindViewModel()
+    }
+    
+    @objc func share() {
+        let actionVC = UIActivityViewController(activityItems: [collection.links?.html as Any], applicationActivities: [])
+        present(actionVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {

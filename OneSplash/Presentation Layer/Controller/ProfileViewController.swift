@@ -118,8 +118,8 @@ class ProfileViewController: PhotoShowerViewControllers {
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-        tableView.register(PhotosCell.self, forCellReuseIdentifier: "likes")
         tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
+//        tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
         tableView.register(CollectionViewCell.self, forCellReuseIdentifier: "collections")
         
         view.addSubview(tableView)
@@ -156,14 +156,12 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                 let message = "No photos"
                 self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView, tag: 100)
             }
-//            showTableLoadView(in: self.tableView))
             return viewModel.photos.count
         case 1:
             if viewModel.likes.isEmpty {
                 let message = "No likes"
                 self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView, tag: 101)
             }
-//            showTableLoadView(in: self.tableView)
             return viewModel.likes.count
         case 2:
             if viewModel.collections.isEmpty {
@@ -171,7 +169,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 //                removeSubViews(tags: [0,1,2])
                 self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
             }
-//            showTableLoadView(in: self.tableView)
             return viewModel.collections.count
         default:
             return 0
@@ -202,19 +199,20 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
             let item = viewModel.photos[indexPath.row]
-            cell?.imageView?.load(urlString: item.urls.regular)
-            cell?.imageView?.contentMode = .scaleAspectFill
-            cell?.imageView?.image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: -10, right: 0))
+            cell?.photoView.load(urlString: item.urls.regular)
+//            cell?.imageView?.contentMode = .scaleAspectFill
+//            cell?.imageView?.image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: -10, right: 0))
             cell?.selectionStyle = .none
-            cell?.backgroundColor = .clear
+            cell?.backgroundColor = UIColor(hexString: item.color!)
             return cell!
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "likes", for: indexPath) as? PhotosCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
             let item = viewModel.likes[indexPath.row]
-            cell?.imageView?.load(urlString: item.urls.regular)
+            cell?.photoView.load(urlString: item.urls.regular)
             cell?.selectionStyle = .none
-            cell?.backgroundColor = .clear
-//            tableContainerView.alpha = 0
+            cell?.backgroundColor = UIColor(hexString: item.color!)
+            cell?.button.setTitle(item.user.username, for: .normal)
+            cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             tableContainerView = nil
             return cell!
         case 2:
@@ -224,12 +222,19 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.backgroudImage.load(urlString: item.coverPhoto.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
-//            tableContainerView.alpha = 0
             tableContainerView = nil
             return cell!
         default:
             return UITableViewCell()
         }
+    }
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        let service = UnsplashService()
+        let viewModel = ProfileViewModel(service: service, username: username)
+        let profileVC = ProfileViewController(viewModel: viewModel)
+        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
