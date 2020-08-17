@@ -13,7 +13,7 @@ class EmptyStateView: UIView {
     
     let messageLabel    = TitleLabel(textAlignment: .center, fontSize: 16)
     let logoImageView   = UIImageView()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -25,7 +25,7 @@ class EmptyStateView: UIView {
     
     init(message: String, logoImage: String) {
         super.init(frame: .zero)
-        messageLabel.text = message
+        messageLabel.text   = message
         logoImageView.image = UIImage(systemName: logoImage)
         configure()
     }
@@ -33,8 +33,8 @@ class EmptyStateView: UIView {
     private func configure() {
         addSubview(messageLabel)
         addSubview(logoImageView)
-
-        logoImageView.tintColor = .gray
+        
+        logoImageView.tintColor     = .gray
         messageLabel.numberOfLines  = 3
         messageLabel.textColor      = .white
         

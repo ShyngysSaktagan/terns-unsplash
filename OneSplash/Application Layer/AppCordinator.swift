@@ -9,25 +9,112 @@
 import UIKit
 
 class AppCoordinator: Coordinator {
+    
+    let mainViewViewModel: MainViewViewModel
+    let photoViewModel: PhotoDetailViewModel
+    let searchViewModel: SearchViewModel
     var navigationController: UINavigationController
+    
+    var changeContact: ((Int) -> Void)?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-    }
-
-    override func start() {
-        ShowMainPage()
+        mainViewViewModel   = MainViewViewModel(service: UnsplashService())
+        photoViewModel      = PhotoDetailViewModel(service: UnsplashService())
+        searchViewModel     = SearchViewModel(service: UnsplashService())
     }
     
-    private func ShowMainPage(){
-        let page = MainScreenViewController { [weak self] user in
-            self?.showUserProfile(user: user, viewModel: MainViewViewModel(service: UnsplashService()))
+    override func start() {
+        showMainPage(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
+    }
+    
+    private func showMainPage(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel, searchViewModel: SearchViewModel) {
+        let page = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
+        
+        let service = UnsplashService()
+        
+        self.changeContact = { [weak page] index in
+            page?.indexPathToStart = index
         }
+        
+        page.didSelectUser = { [weak self] (username) in
+            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+        }
+        
+        page.didSelectPhoto = { [weak self] photos, index in
+            self?.showPhotoPage(viewModel: PhotoViewModel(service: service), index: index, photos: photos)
+        }
+        
+        page.didSelectCollection = { [weak self] collections, index in
+            self?.showCollectionPage(viewModel: PhotoDetailViewModel(service: service), index: index, collections: collections)
+        }
+    
         navigationController.pushViewController(page, animated: true)
     }
     
-    func showUserProfile(user: User, viewModel: ProfileViewModel){
-        let page = ProfileViewController(user: user, viewModel: viewModel)
+    func showProfilePage(username: String, viewModel: ProfileViewModel) {
+        let page = ProfileViewController(viewModel: viewModel)
+        
+        self.changeContact = { [weak page] index in
+            page?.indexPathToStart = index
+        }
+        
+        page.didSelectUser = { [weak self] (username) in
+            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+        }
+        
+        page.didSelectLike = { [weak self] photos, index in
+            self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
+        }
+        
+        page.didSelectPhoto = { [weak self] photos, index in
+            self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
+        }
+        
+        page.didSelectCollection = { [weak self] collections, index in
+            self?.showCollectionPage(viewModel: PhotoDetailViewModel(service: UnsplashService()), index: index, collections: collections)
+        }
+        
+        navigationController.pushViewController(page, animated: true)
+    }
+    
+    func showPhotoPage(viewModel: PhotoViewModel, index: Int, photos: [Photo]) {
+        let item = photos[index]
+        let page = PhotoViewController(viewModel: viewModel)
+        
+        page.didSaveButtonClicked = { [weak self] (index) in
+            self?.changeContact?(index)
+            self?.navigationController.popViewController(animated: true)
+        }
+        
+        page.didSelectUser = { [weak self] (username) in
+            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+        }
+        
+        page.photos = photos
+        page.indexPathToScroll = index
+        page.titleButton.setTitle(item.user.username, for: .normal)
+        navigationController.pushViewController(page, animated: true)
+    }
+    
+    func showCollectionPage(viewModel: PhotoDetailViewModel, index: Int, collections: [Collection]) {
+        let item = collections[index]
+        let page = PhotoDetailViewController(viewModel: viewModel)
+        
+        self.changeContact = { [weak page] index in
+            page?.indexPathToStart = index
+        }
+        
+        page.didSelectPhoto = { [weak self] photos, index in
+            self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
+        }
+        
+        page.didSelectUser = { [weak self] (username) in
+            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+        }
+        
+        page.collection = item
+        page.title = item.title
         navigationController.pushViewController(page, animated: true)
     }
 }

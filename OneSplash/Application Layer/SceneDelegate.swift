@@ -11,31 +11,31 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
+    var appCoordinator: AppCoordinator!
 
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-		guard let scene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         configureNavigationBar()
-		let window = UIWindow(windowScene: scene)
-        let service = UnsplashService()
-        let mainViewViewModel = MainViewViewModel(service: service)
-        let photoViewModel = PhotoDetailViewModel(service: service)
-        let searchViewModel = SearchViewModel(service: service)
-        let mainVC = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
-		let nav = UINavigationController(rootViewController: mainVC)
-		window.rootViewController = nav
-		self.window = window
-		window.backgroundColor = .white
-		window.makeKeyAndVisible()
+        window = UIWindow(windowScene: windowScene)
+        
+        appCoordinator = AppCoordinator(navigationController: UINavigationController())
+        appCoordinator.start()
+        
+        window?.rootViewController = appCoordinator.navigationController
+        window?.makeKeyAndVisible()
 	}
     
     func configureNavigationBar() {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UIBarButtonItem.appearance().tintColor = .white
-//        UIBarButtonItem.appearance().cl
-        UINavigationBar.appearance().isTranslucent = true
-        
-        UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        UINavigationBar.appearance().shadowImage                = UIImage()
+        UIBarButtonItem.appearance().tintColor                  = .white
+        UINavigationBar.appearance().isTranslucent              = true
+        UINavigationBar.appearance().titleTextAttributes        = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().largeTitleTextAttributes   = [.foregroundColor: UIColor.white]
+        UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white],
+                                                               for: .selected)
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+
 
     }
     

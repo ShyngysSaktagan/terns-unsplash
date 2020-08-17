@@ -13,15 +13,12 @@ var containerView: UIView!
 
 var tableContainerView: UIView!
 
-class PhotoShowerViewControllers: UIViewController, PhotoStarter {
-    func startAt(indexPath: Int) {
-        indexPathToStart = indexPath
-    }
-    
+class PhotoShowerViewControllers: UIViewController {
     var onceOnly = false
     var indexPathToStart: Int?
-
+    
     func start(tableView: UITableView, section: Int) {
+        
         if !onceOnly {
             let indexPath = IndexPath(row: indexPathToStart ?? 0, section: section)
             if (tableView.numberOfSections > indexPath.section && tableView.numberOfRows(inSection: indexPath.section) > indexPath.row ) {
@@ -35,11 +32,11 @@ class PhotoShowerViewControllers: UIViewController, PhotoStarter {
         view.addSubview(containerView)
         containerView.backgroundColor   = .bcc
         containerView.alpha             = 0
-
+        
         UIView.animate(withDuration: 0.2) {
             containerView.alpha = 1
         }
-
+        
         let activityIndicator = NVActivityIndicatorView(frame: .zero, type: .ballRotate, color: .gray, padding: 0)
         containerView.addSubview(activityIndicator)
         activityIndicator.snp.makeConstraints { make in
@@ -55,11 +52,11 @@ class PhotoShowerViewControllers: UIViewController, PhotoStarter {
         table.addSubview(tableContainerView)
         tableContainerView.backgroundColor   = .bcc
         tableContainerView.alpha             = 0
-
+        
         UIView.animate(withDuration: 0.2) {
             tableContainerView.alpha = 1
         }
-
+        
         let activityIndicator = NVActivityIndicatorView(frame: .zero, type: .ballRotate, color: .gray, padding: 0)
         tableContainerView.addSubview(activityIndicator)
         activityIndicator.snp.makeConstraints { make in
@@ -69,10 +66,4 @@ class PhotoShowerViewControllers: UIViewController, PhotoStarter {
         }
         activityIndicator.startAnimating()
     }
-    
-    //    func showEmptyStateView(with message: String, image: String, in view: UIView) {
-    //        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
-    //        emptyStateView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: view.frame.height)
-    //        view.addSubview(emptyStateView)
-    //    }
 }

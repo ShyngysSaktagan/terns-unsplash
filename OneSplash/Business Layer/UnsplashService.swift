@@ -10,30 +10,30 @@ import Foundation
 import Alamofire
 
 class UnsplashService {
-	
+    
     func getSamplePhotos(page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
-		let params: Parameters = [
-			"client_id": UnsplashAPI.Stoken,
+        let params: Parameters = [
+            "client_id": UnsplashAPI.Stoken,
             "page" : page
-		]
-		AF.request(UnsplashAPI.baseURL + UnsplashAPI.photosPostfix, method: .get, parameters: params).response { (response) in
-			switch response.result {
-			case .success(let data):
-				if data != nil {
-					let decoder = JSONDecoder()
-					decoder.keyDecodingStrategy = .convertFromSnakeCase
-					do {
-						let photos = try decoder.decode([Photo].self, from: data!)
-						success(photos)                        
-					} catch {
-						debugPrint(error)
-					}
-				}
-			case .failure(let error):
-				debugPrint(error)
-			}
-		}
-	}
+        ]
+        AF.request(UnsplashAPI.baseURL + UnsplashAPI.photosPostfix, method: .get, parameters: params).response { (response) in
+            switch response.result {
+            case .success(let data):
+                if data != nil {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    do {
+                        let photos = try decoder.decode([Photo].self, from: data!)
+                        success(photos)
+                    } catch {
+                        debugPrint(error)
+                    }
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
     
     func getPhoto(id: String, success: @escaping (Photo) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
@@ -73,7 +73,6 @@ class UnsplashService {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     do {
                         let collection = try decoder.decode([Collection].self, from: data!)
-//                        print(collection)
                         success(collection)
                     } catch {
                         debugPrint(error)
@@ -94,22 +93,21 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.collectionsPostfix + "/\(id)/\(UnsplashAPI.photosPostfix)"
             , method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode([Photo].self, from: data!)
-//                        print(photos)
-                        success(photos)
-                    } catch {
-                        debugPrint(error)
+                switch response.result {
+                case .success(let data):
+                    if data != nil {
+                        let decoder = JSONDecoder()
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        do {
+                            let photos = try decoder.decode([Photo].self, from: data!)
+                            success(photos)
+                        } catch {
+                            debugPrint(error)
+                        }
                     }
+                case .failure(let error):
+                    debugPrint(error)
                 }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
     
@@ -147,23 +145,23 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
             UnsplashAPI.photosPostfix , method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode([Photo].self, from: data!)
-                        print("Photos")
-                        print(photos)
-                        success(photos)
-                    } catch {
-                        debugPrint(error)
+                switch response.result {
+                case .success(let data):
+                    if data != nil {
+                        let decoder = JSONDecoder()
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        do {
+                            let photos = try decoder.decode([Photo].self, from: data!)
+                            print("Photos")
+                            print(photos)
+                            success(photos)
+                        } catch {
+                            debugPrint(error)
+                        }
                     }
+                case .failure(let error):
+                    debugPrint(error)
                 }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
     
@@ -175,23 +173,23 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
             UnsplashAPI.likesPostfix , method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode([Photo].self, from: data!)
-                        print("Likes")
-                        print(photos)
-                        success(photos)
-                    } catch {
-                        debugPrint(error)
+                switch response.result {
+                case .success(let data):
+                    if data != nil {
+                        let decoder = JSONDecoder()
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        do {
+                            let photos = try decoder.decode([Photo].self, from: data!)
+                            print("Likes")
+                            print(photos)
+                            success(photos)
+                        } catch {
+                            debugPrint(error)
+                        }
                     }
+                case .failure(let error):
+                    debugPrint(error)
                 }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
     
@@ -202,28 +200,25 @@ class UnsplashService {
         ]
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
             UnsplashAPI.collectionsPostfix , method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode([Collection].self, from: data!)
-                        print("Collections")
-                        print(photos)
-                        success(photos)
-                    } catch {
-                        debugPrint(error)
+                switch response.result {
+                case .success(let data):
+                    if data != nil {
+                        let decoder = JSONDecoder()
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        do {
+                            let photos = try decoder.decode([Collection].self, from: data!)
+                            print("Collections")
+                            print(photos)
+                            success(photos)
+                        } catch {
+                            debugPrint(error)
+                        }
                     }
+                case .failure(let error):
+                    debugPrint(error)
                 }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
-    
-    
-    
     
     func searchPhotos(query: String, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
@@ -233,21 +228,21 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.photosPostfix,
                    method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode(PhotoResults.self, from: data!)
-                        success(photos.results)
-                    } catch {
+                    switch response.result {
+                    case .success(let data):
+                        if data != nil {
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            do {
+                                let photos = try decoder.decode(PhotoResults.self, from: data!)
+                                success(photos.results)
+                            } catch {
+                                debugPrint(error)
+                            }
+                        }
+                    case .failure(let error):
                         debugPrint(error)
                     }
-                }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
     
@@ -259,21 +254,21 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.collectionsPostfix,
                    method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode(CollectionResults.self, from: data!)
-                        success(photos.results)
-                    } catch {
+                    switch response.result {
+                    case .success(let data):
+                        if data != nil {
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            do {
+                                let photos = try decoder.decode(CollectionResults.self, from: data!)
+                                success(photos.results)
+                            } catch {
+                                debugPrint(error)
+                            }
+                        }
+                    case .failure(let error):
                         debugPrint(error)
                     }
-                }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
     
@@ -285,21 +280,21 @@ class UnsplashService {
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.userPostfix,
                    method: .get, parameters: params).response { (response) in
-            switch response.result {
-            case .success(let data):
-                if data != nil {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    do {
-                        let photos = try decoder.decode(UserResults.self, from: data!)
-                        success(photos.results)
-                    } catch {
+                    switch response.result {
+                    case .success(let data):
+                        if data != nil {
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            do {
+                                let photos = try decoder.decode(UserResults.self, from: data!)
+                                success(photos.results)
+                            } catch {
+                                debugPrint(error)
+                            }
+                        }
+                    case .failure(let error):
                         debugPrint(error)
                     }
-                }
-            case .failure(let error):
-                debugPrint(error)
-            }
         }
     }
 }

@@ -9,22 +9,23 @@
 import UIKit
 
 class TitleLabel: UILabel {
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    init(textAlignment: NSTextAlignment, fontSize: CGFloat, weight: UIFont.Weight = .light ,text: String = "", color: UIColor = .white) {
+    
+    init(textAlignment: NSTextAlignment, fontSize: CGFloat, weight: UIFont.Weight = .light,
+         text: String = "", color: UIColor = .white) {
         super.init(frame: .zero)
-        self.textAlignment = textAlignment
-        self.text = text
-        self.font = .systemFont(ofSize: fontSize, weight: weight)
-        self.textColor = color
+        self.textAlignment  = textAlignment
+        self.text           = text
+        self.font           = .systemFont(ofSize: fontSize, weight: weight)
+        self.textColor      = color
         configure()
     }
     

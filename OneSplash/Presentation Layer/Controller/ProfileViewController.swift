@@ -17,8 +17,12 @@ class ProfileViewController: PhotoShowerViewControllers {
         super.init(nibName: nil, bundle: nil)
     }
     
+    var didSelectUser: ((String) -> Void)?
+    var didSelectLike: (([Photo], Int) -> Void)?
+    var didSelectCollection: (([Collection], Int) -> Void)?
+    var didSelectPhoto: (([Photo], Int) -> Void)?
+    
     func fetchViewModelDatas() {
-//        showTableLoadView(in: self.tableView)
         viewModel.getUser()
         viewModel.getUserLikes()
         viewModel.getUserPhotos()
@@ -48,6 +52,30 @@ class ProfileViewController: PhotoShowerViewControllers {
         return imageView
     }()
     
+    let headerView = UIView()
+    
+    func configureHeaderView() {
+        [usernameLabel, userLocationStackView, userPicture].forEach { headerView.addSubview($0) }
+        view.addSubview(headerView)
+        headerView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(15)
+            make.height.equalTo(150)
+            make.leading.trailing.equalToSuperview()
+        }
+        userPicture.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().inset(15)
+            make.height.width.equalTo(60)
+        }
+        usernameLabel.snp.makeConstraints { make in
+            make.top.equalTo(userPicture.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().inset(15)
+        }
+        userLocationStackView.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().offset(15)
+        }
+    }
+    
     let usernameLabel = TitleLabel(textAlignment: .left, fontSize: 25, weight: .bold)
     let userlocationLabel = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
     let userURL = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
@@ -61,11 +89,16 @@ class ProfileViewController: PhotoShowerViewControllers {
         return segmentController
     }()
     
-    lazy var userLocationStackView: UIStackView = {
+    let locationImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: Symbols.pin)
         imageView.tintColor = .gray
-        let stackView = UIStackView(arrangedSubviews: [imageView, userlocationLabel, UIView()])
+        return imageView
+    }()
+    
+    lazy var userLocationStackView: UIStackView = {
+        
+        let stackView = UIStackView(arrangedSubviews: [locationImageView, userlocationLabel, UIView()])
         stackView.axis = .horizontal
         stackView.spacing = 8
         return stackView
@@ -84,34 +117,36 @@ class ProfileViewController: PhotoShowerViewControllers {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .bcc
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
-        configureUserLabels()
+//        configureUserLabels()
+        configureHeaderView()
         configureTableView()
         fetchViewModelDatas()
         bindViewModel()
     }
-    
+
     @objc func share() {
         let actionVC = UIActivityViewController(activityItems: [viewModel.user?.links?.html as Any], applicationActivities: [])
         present(actionVC, animated: true)
     }
     
-    func configureUserLabels() {
-        [userPicture, usernameLabel, userLocationStackView].forEach { view.addSubview($0) }
-        
-        userPicture.snp.makeConstraints { make in
-            make.top.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
-            make.height.width.equalTo(60)
-        }
-        usernameLabel.snp.makeConstraints { make in
-            make.top.equalTo(userPicture.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(15)
-        }
-        userLocationStackView.snp.makeConstraints { make in
-            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().offset(15)
-        }
-    }
+//    func configureUserLabels() {
+//        [userPicture, usernameLabel, userLocationStackView].forEach { view.addSubview($0) }
+//
+//        userPicture.snp.makeConstraints { make in
+//            make.top.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
+//            make.height.width.equalTo(60)
+//        }
+//        usernameLabel.snp.makeConstraints { make in
+//            make.top.equalTo(userPicture.snp.bottom).offset(10)
+//            make.leading.trailing.equalToSuperview().inset(15)
+//        }
+//        userLocationStackView.snp.makeConstraints { make in
+//            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
+//            make.leading.trailing.equalToSuperview().offset(15)
+//        }
+//    }
 
     func configureTableView() {
         tableView.delegate = self
@@ -119,7 +154,6 @@ class ProfileViewController: PhotoShowerViewControllers {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
-//        tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
         tableView.register(CollectionViewCell.self, forCellReuseIdentifier: "collections")
         
         view.addSubview(tableView)
@@ -145,6 +179,15 @@ class ProfileViewController: PhotoShowerViewControllers {
             }
         }
     }
+    
+    func checkLabels() {
+        if userlocationLabel.text == nil {
+            userLocationStackView.removeArrangedSubview(userlocationLabel)
+            userLocationStackView.removeArrangedSubview(locationImageView)
+            userlocationLabel.isHidden = true
+            locationImageView.isHidden = true
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
@@ -166,7 +209,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             if viewModel.collections.isEmpty {
                 let message = "No collections"
-//                removeSubViews(tags: [0,1,2])
                 self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
             }
             return viewModel.collections.count
@@ -175,33 +217,17 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func checkLabels() {
-        if userlocationLabel.text == nil {
-            userLocationStackView.removeFromSuperview()
-            tableView.removeFromSuperview()
-            view.addSubview(tableView)
-            tableView.snp.makeConstraints { make in
-                make.top.equalTo(usernameLabel.snp.bottom).offset(10)
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(view.safeAreaLayoutGuide)
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         userPicture.load(urlString: viewModel.user?.profileImage?.medium ?? "")
         usernameLabel.text = viewModel.user?.name
         userlocationLabel.text = viewModel.user?.location
-//        userURL.text = viewModel.user?.portfolioUrl
         checkLabels()
         switch segmentController.selectedSegmentIndex {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
             let item = viewModel.photos[indexPath.row]
             cell?.photoView.load(urlString: item.urls.regular)
-//            cell?.imageView?.contentMode = .scaleAspectFill
-//            cell?.imageView?.image?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: -10, right: 0))
             cell?.selectionStyle = .none
             cell?.backgroundColor = UIColor(hexString: item.color!)
             return cell!
@@ -213,7 +239,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.backgroundColor = UIColor(hexString: item.color!)
             cell?.button.setTitle(item.user.username, for: .normal)
             cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
-            tableContainerView = nil
             return cell!
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell
@@ -222,7 +247,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.backgroudImage.load(urlString: item.coverPhoto.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
-            tableContainerView = nil
             return cell!
         default:
             return UITableViewCell()
@@ -231,10 +255,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc private func didTapNumber(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
-        let service = UnsplashService()
-        let viewModel = ProfileViewModel(service: service, username: username)
-        let profileVC = ProfileViewController(viewModel: viewModel)
-        navigationController?.pushViewController(profileVC, animated: true)
+        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -271,33 +292,13 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let service = UnsplashService()
-        let photoViewModel = PhotoViewModel(service: service)
-        let photoViewController = PhotoViewController(viewModel: photoViewModel)
         switch segmentController.selectedSegmentIndex {
         case 0:
-            let item = viewModel.photos[indexPath.row]
-            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
-            photoViewController.photos = viewModel.photos
-            photoViewController.indexPathToScroll = indexPath.row
-            photoViewController.modalPresentationStyle = .fullScreen
-            photoViewController.photoStarterDelegate = self
-            present(photoViewController, animated: true)
+            didSelectPhoto?(viewModel.photos, indexPath.row)
         case 1:
-            let item = viewModel.likes[indexPath.row]
-            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
-            photoViewController.photos = viewModel.likes
-            photoViewController.indexPathToScroll = indexPath.row
-            photoViewController.modalPresentationStyle = .fullScreen
-            photoViewController.photoStarterDelegate = self
-            present(photoViewController, animated: true)
+            didSelectLike?(viewModel.likes, indexPath.row)
         case 2:
-            let photoDetailViewModel = PhotoDetailViewModel(service: service)
-            let photoDetailViewController = PhotoDetailViewController(viewModel: photoDetailViewModel)
-            let item = viewModel.collections[indexPath.row]
-            photoDetailViewController.collection = item
-            photoDetailViewController.title = item.title
-            navigationController?.pushViewController(photoDetailViewController, animated: true)
+            didSelectCollection?(viewModel.collections, indexPath.row)
         default:
             print("sd")
         }

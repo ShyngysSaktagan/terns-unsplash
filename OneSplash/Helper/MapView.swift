@@ -24,11 +24,11 @@ class MapView: MKMapView {
     
     func addLocation(photoLocation: Photo) {
         if let item = photoLocation.location {
-            let annotation = MKPointAnnotation()
-            annotation.title = item.city
+            let annotation      = MKPointAnnotation()
+            annotation.title    = item.city
             annotation.subtitle = item.country
-            self.longitude = item.position?.longitude
-            self.latitude = item.position?.latitude
+            self.longitude      = item.position?.longitude
+            self.latitude       = item.position?.latitude
             annotation.coordinate = CLLocationCoordinate2D(latitude: item.position?.latitude ?? 0,
                                                            longitude: item.position?.longitude ?? 0)
             self.addAnnotation(annotation)
@@ -66,12 +66,10 @@ class MapView: MKMapView {
             self.showsUserLocation = true
             locationManager.startUpdatingLocation()
         case .denied:
-            // Show alert instructing them how to turn on permissions
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
-            // Show an alert letting them know what's up
             break
         case .authorizedAlways:
             break

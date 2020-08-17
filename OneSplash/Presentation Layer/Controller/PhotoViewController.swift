@@ -9,20 +9,18 @@
 import UIKit
 import SnapKit
 
-protocol PhotoStarter {
-    func startAt(indexPath: Int)
-}
-
 class PhotoViewController: UIViewController {
     
     let viewModel: PhotoViewModel
     var photos: [Photo]!
     var indexPathToScroll: Int?
     var indexPathToEnd: Int?
-    var photoStarterDelegate: PhotoStarter!
     var onceOnly = false
     var currentPhoto = UIImageView()
     let infoView = InfoView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: 800))
+    
+    var didSaveButtonClicked: ((Int) -> Void)?
+    var didSelectUser: ((String) -> Void)?
     
     init(viewModel: PhotoViewModel) {
         self.viewModel = viewModel
@@ -46,54 +44,6 @@ class PhotoViewController: UIViewController {
         }
     }
 
-    @objc private func didTapNumber(_ sender: UIButton) {
-        print("hello")
-        let username = (sender.titleLabel?.text ?? "").lowercased()
-        let service = UnsplashService()
-        let viewModel = ProfileViewModel(service: service, username: username)
-        let profileVC = ProfileViewController(viewModel: viewModel)
-//        dismiss(animated: false, completion: nil)
-        
-        super.navigationController?.pushViewController(profileVC, animated: true)
-    }
-    
-    let prifileName: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .black)
-        button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
-        return button
-    }()
-    
-    @objc private func handleTap() {
-        print("show me ")
-    }
-    
-    let exitButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: Symbols.exit), for: .normal)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(exit), for: .touchUpInside)
-        return button
-    }()
-    
-    let actionButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: Symbols.share), for: .normal)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(share), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [exitButton, prifileName, actionButton])
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.distribution = .equalSpacing
-        return stackView
-    }()
-    
     let saveButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(save), for: .touchUpInside)
@@ -104,6 +54,21 @@ class PhotoViewController: UIViewController {
         button.layer.cornerRadius = button.frame.size.height / 2.0
         return button
     }()
+    
+    let titleButton: UIButton = {
+        let button =  UIButton(type: .custom)
+        button.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
+        button.backgroundColor = .bcc
+        button.titleLabel?.textColor = .white
+        return button
+    }()
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        print(username)
+        didSelectUser?(username)
+    }
     
     let infoButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -127,10 +92,8 @@ class PhotoViewController: UIViewController {
     }
     
     @objc func exit() {
-        self.photoStarterDelegate.startAt(indexPath: self.indexPathToEnd ?? 0)
-        dismiss(animated: true) {
-//            print(self.indexPathToEnd ?? 0)
-        }
+        print(self.indexPathToEnd ?? 0)
+        didSaveButtonClicked?(self.indexPathToEnd ?? 0)
     }
     
     @objc func share() {
@@ -164,11 +127,19 @@ class PhotoViewController: UIViewController {
         saveButton.layer.cornerRadius = saveButton.frame.size.height / 2.0
         saveButton.clipsToBounds = true
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: #selector(exit))
+        if #available(iOS 13.0, *) {
+            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        } else {
+            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        }
         view.backgroundColor = .bcc
-        configureStackView()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+        navigationItem.titleView = titleButton
         configureCollectionView()
         configureSaveButton()
         configureInfoButton()
@@ -184,21 +155,13 @@ class PhotoViewController: UIViewController {
     func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.bottom)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.bottom.equalToSuperview()
         }
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.collectionViewLayout.invalidateLayout()
-    }
-    
-    func configureStackView() {
-        view.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.trailing.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-        }
     }
 }
 
@@ -212,12 +175,13 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         
         let item = photos[indexPath.row]
-        cell?.imageView.load(urlString: item.urls.small)
+        cell?.imageView.load(urlString: item.urls.thumb)
+        titleButton.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
         infoView.addInfo(of: item)
         return cell!
     }
@@ -229,10 +193,10 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 currentIndex = indexPath.dropFirst()[0]
             }
         }
-
+        
         let item = photos[currentIndex]
-        prifileName.setTitle(item.user.name, for: .normal) 
-        currentPhoto.load(urlString: item.urls.small)
+        titleButton.setTitle(item.user.username, for: .normal)
+        currentPhoto.load(urlString: item.urls.thumb)
         indexPathToEnd = currentIndex
         fetchPhotoData(id: item.id)
         guard let photoInfo = viewModel.photo else {
@@ -243,7 +207,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func fetchPhotoData(id: String) {
         viewModel.getPhoto(id: id)
-//        infoView.addInfo(of: viewModel.photo ?? )
+        //        infoView.addInfo(of: viewModel.photo ?? )
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -272,14 +236,14 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     @objc private func didTapDismissButton() {
-
+        
         UIView.animate(withDuration: 0.4, animations: { [weak self] in
             self?.infoView.transform = .identity
             self?.blackBackgroundView.alpha = 0
-        }, completion: { _ in
-            self.blackBackgroundView.removeFromSuperview()
-            self.infoView.removeFromSuperview()
-            self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.zoomOut)))
+            }, completion: { _ in
+                self.blackBackgroundView.removeFromSuperview()
+                self.infoView.removeFromSuperview()
+                self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.zoomOut)))
         })
     }
     
@@ -292,8 +256,8 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1,
                        initialSpringVelocity: 0.5, options: .curveEaseOut, animations: { () -> Void in
-            self.blackBackgroundView.alpha = 0.5
-            }, completion: nil)
+                        self.blackBackgroundView.alpha = 0.5
+        }, completion: nil)
     }
     
     @objc func zoomOut() {

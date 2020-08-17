@@ -18,7 +18,5 @@ class Coordinator {
         childCoordinators.append(coordinator)
     }
     
-    func remove(_ coordinator: Coordinator) {
-        //
-    }
+    func remove(_ coordinator: Coordinator) {}
 }

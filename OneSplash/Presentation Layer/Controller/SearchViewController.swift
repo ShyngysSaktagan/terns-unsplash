@@ -56,7 +56,7 @@ class SearchViewController: PhotoShowerViewControllers {
         view.backgroundColor = .bcc
         [segmentController, tableView].forEach { view.addSubview($0) }
         segmentController.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(8)
+            make.top.equalToSuperview().inset(8)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
         tableView.snp.makeConstraints { make in
@@ -132,7 +132,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell
             let item = viewModel.collections[indexPath.row]
             cell?.titleLabel.text = item.title
-            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.small)
+            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.thumb)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
             return cell!
@@ -172,11 +172,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         switch segmentController.selectedSegmentIndex {
         case 0:
             let item = viewModel.photos[indexPath.row]
-            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
+//            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
+            photoViewController.title = item.user.name
             photoViewController.photos = viewModel.photos
             photoViewController.indexPathToScroll = indexPath.row
             photoViewController.modalPresentationStyle = .fullScreen
-            photoViewController.photoStarterDelegate = self
+//            photoViewController.photoStarterDelegate = self
             present(photoViewController, animated: true)
         case 1:
             let photoDetailViewModel = PhotoDetailViewModel(service: service)

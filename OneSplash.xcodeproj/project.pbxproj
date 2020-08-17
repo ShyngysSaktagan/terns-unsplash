@@ -46,7 +46,6 @@
 		9C07CB6A24D93FCE00DD39DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */; };
 		9C1E8F8324D97CAA00AE44A8 /* UnsplashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8224D97CAA00AE44A8 /* UnsplashAPI.swift */; };
 		9C1E8F8524D97F0A00AE44A8 /* UnsplashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8424D97F0A00AE44A8 /* UnsplashService.swift */; };
-		9C1E8F8A24D9807A00AE44A8 /* PhotoURLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */; };
 		9C1E8F8C24D9833500AE44A8 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E8F8B24D9833500AE44A8 /* Photo.swift */; };
 /* End PBXBuildFile section */
 
@@ -93,7 +92,6 @@
 		9C07CB6B24D93FCE00DD39DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C1E8F8224D97CAA00AE44A8 /* UnsplashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashAPI.swift; sourceTree = "<group>"; };
 		9C1E8F8424D97F0A00AE44A8 /* UnsplashService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashService.swift; sourceTree = "<group>"; };
-		9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoURLs.swift; sourceTree = "<group>"; };
 		9C1E8F8B24D9833500AE44A8 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E2377561D3E1E388E717843A /* Pods-OneSplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSplash.release.xcconfig"; path = "Target Support Files/Pods-OneSplash/Pods-OneSplash.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -256,7 +254,6 @@
 		9C1E8F8624D97FB700AE44A8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9C1E8F8924D9807A00AE44A8 /* PhotoURLs.swift */,
 				9C1E8F8B24D9833500AE44A8 /* Photo.swift */,
 				7E6790BF24DA4F3F0076FABA /* Collection.swift */,
 				7E818EA724DB471900851D1D /* User.swift */,
@@ -406,7 +403,6 @@
 				7EFFB4E424E953E0007B1726 /* Coordinator.swift in Sources */,
 				9C1E8F8324D97CAA00AE44A8 /* UnsplashAPI.swift in Sources */,
 				7E818EAC24DB5C3000851D1D /* PhotosCell.swift in Sources */,
-				9C1E8F8A24D9807A00AE44A8 /* PhotoURLs.swift in Sources */,
 				7E818EA824DB471900851D1D /* User.swift in Sources */,
 				9C1E8F8C24D9833500AE44A8 /* Photo.swift in Sources */,
 				7EE65C2C24DA225700362B7F /* ExploreCell.swift in Sources */,

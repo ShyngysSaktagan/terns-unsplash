@@ -11,22 +11,24 @@ import SnapKit
 import NVActivityIndicatorView
 
 class MainScreenViewController: PhotoShowerViewControllers {
-        
-    let mainViewViewModel : MainViewViewModel
-    let photoViewModel : PhotoDetailViewModel
+    
+    let mainViewViewModel: MainViewViewModel
+    let photoViewModel: PhotoDetailViewModel
     let searchViewModel: SearchViewModel
-    let tableView = UITableView()
-    let sectionTypes   = [ "Explore", "New" ]
-    var currentIndex: Int?
-    var user: String?
-    var searchViewController : SearchViewController
+    var searchViewController: SearchViewController
+    
+    let tableView       = UITableView()
+    let sectionTypes    = [ "Explore", "New" ]
+    
+    var didSelectUser: ((String) -> Void)?
+    var didSelectCollection: (([Collection], Int) -> Void)?
+    var didSelectPhoto: (([Photo], Int) -> Void)?
     
     init(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel, searchViewModel: SearchViewModel) {
-        self.mainViewViewModel = mainViewViewModel
-        self.photoViewModel = photoViewModel
-        self.searchViewModel = searchViewModel
-        
-        searchViewController = SearchViewController(viewModel: self.searchViewModel)
+        self.mainViewViewModel  = mainViewViewModel
+        self.photoViewModel     = photoViewModel
+        self.searchViewModel    = searchViewModel
+        searchViewController    = SearchViewController(viewModel: self.searchViewModel)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,10 +37,9 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     private lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: searchViewController)
-        searchController.obscuresBackgroundDuringPresentation = true
+        let searchController                = UISearchController(searchResultsController: searchViewController)
         searchController.searchBar.delegate = searchViewController
-//        searchController.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = true
         return searchController
     }()
     
@@ -60,9 +61,9 @@ class MainScreenViewController: PhotoShowerViewControllers {
     func configureTableView() {
         view.addSubview(tableView)
         configureNavigationBar(largeTitleColor: .bcc, backgoundColor: .bcc, tintColor: .white, title: "", preferredLargeTitle: false)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .clear
+        tableView.delegate          = self
+        tableView.dataSource        = self
+        tableView.backgroundColor   = .clear
         tableView.register(ExploreCellTableCell.self, forCellReuseIdentifier: "exploreCell")
         tableView.register(PhotosCell.self, forCellReuseIdentifier: "newCell")
         tableView.snp.makeConstraints { make in
@@ -80,9 +81,9 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     private func setupNavigationBar() {
+        definesPresentationContext      = true
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        definesPresentationContext = true
     }
     
     func fetchAll() {
@@ -92,12 +93,10 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     func fetchCollections() {
-//        mainViewViewModel.getCollections(page: mainViewViewModel.page)
         mainViewViewModel.getCollections()
     }
     
     func fetchPhotos() {
-//        photoViewModel.getNewPhotos(page: photoViewModel.page)
         photoViewModel.getNewPhotos()
     }
     
@@ -105,7 +104,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
     let blackBackgroud = UIView()
     var photoView: UIImageView?
     let navBarCover = UIView()
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY         = scrollView.contentOffset.y
         let contentHeight   = scrollView.contentSize.height
@@ -121,16 +120,9 @@ class MainScreenViewController: PhotoShowerViewControllers {
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let label: UILabel = {
-            let label   = UILabel()
-            label.text  = sectionTypes[section]
-            label.font  = .systemFont(ofSize: 24)
-            label.textColor = .white
-            return label
-        }()
-        
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
-        headerView.backgroundColor = .bcc
+        let label = TitleLabel(textAlignment: .right, fontSize: 24, weight: .regular, color: .white)
+        let headerView              = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
+        headerView.backgroundColor  = .bcc
         headerView.addSubview(label)
         label.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
@@ -159,12 +151,12 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "exploreCell", for: indexPath) as? ExploreCellTableCell
             return cell!
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
-            let item = photoViewModel.photos[indexPath.row]
-            self.currentIndex = indexPath.row
-            cell?.backgroundColor = UIColor(hexString: item.color!)
-            cell?.photoView.load(urlString: item.urls.small)
+            let cell                = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
+            let item                = photoViewModel.photos[indexPath.row]
+            
+            cell?.photoView.load(urlString: item.urls.thumb)
             cell?.button.setTitle(item.user.username, for: .normal)
+            cell?.backgroundColor   = UIColor(hexString: item.color!)
             cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             return cell!
         }
@@ -172,18 +164,15 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc private func didTapNumber(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
-        let service = UnsplashService()
-        let viewModel = ProfileViewModel(service: service, username: username)
-        let profileVC = ProfileViewController(viewModel: viewModel)
-        navigationController?.pushViewController(profileVC, animated: true)
+        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 215
         } else {
-            let item = photoViewModel.photos[indexPath.row]
-            let imageCrop = CGFloat( item.width) / CGFloat(item.height)
+            let item        = photoViewModel.photos[indexPath.row]
+            let imageCrop   = CGFloat( item.width) / CGFloat(item.height)
             return tableView.frame.width / imageCrop
         }
         
@@ -192,24 +181,15 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             if let cell = cell as? ExploreCellTableCell {
-                cell.collectionView.dataSource = self
-                cell.collectionView.delegate = self
+                cell.collectionView.dataSource  = self
+                cell.collectionView.delegate    = self
                 cell.collectionView.reloadData()
             }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = photoViewModel.photos[indexPath.row]
-        let service = UnsplashService()
-        let viewModel = PhotoViewModel(service: service)
-        let photoViewController = PhotoViewController(viewModel: viewModel)
-        photoViewController.photos = photoViewModel.photos
-        photoViewController.indexPathToScroll = indexPath.row
-        photoViewController.modalPresentationStyle = .fullScreen
-        photoViewController.photoStarterDelegate = self
-        photoViewController.prifileName.setTitle(item.user.name, for: .normal)
-        present(photoViewController, animated: true)
+        didSelectPhoto?(photoViewModel.photos, indexPath.row)
     }
 }
 
@@ -230,26 +210,18 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
         let item = mainViewViewModel.collections[indexPath.row]
         if (indexPath.row+1) / mainViewViewModel.counting == 1 {
             mainViewViewModel.page += 1
-//            mainViewViewModel.getCollections(page: mainViewViewModel.page)
             mainViewViewModel.getCollections()
             mainViewViewModel.counting += mainViewViewModel.constantCount
         }
         
         cell?.backgroundColor = UIColor(hexString: item.coverPhoto.color!)
         cell?.layer.cornerRadius = 12
-//        cell?.backgroundColor = UIColor( named: item.coverPhoto.color!)
-        cell?.imageView.load(urlString: item.coverPhoto.urls.small)
+        cell?.imageView.load(urlString: item.coverPhoto.urls.thumb)
         cell?.titleLabel.text = item.title
         return cell!
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = mainViewViewModel.collections[indexPath.row]
-        let service = UnsplashService()
-        let viewModel = PhotoDetailViewModel(service: service)
-        let exploreDetailVC = PhotoDetailViewController(viewModel: viewModel)
-        exploreDetailVC.collection = item
-        exploreDetailVC.title = item.title
-        navigationController?.pushViewController(exploreDetailVC, animated: true)
+        self.didSelectCollection?(mainViewViewModel.collections, indexPath.row)
     }
 }

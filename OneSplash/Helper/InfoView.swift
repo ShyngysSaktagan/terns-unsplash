@@ -29,7 +29,7 @@ class InfoView: UIView {
     }
     
     let mapView = MapView()
-     
+    
     let makeLabel           = TitleLabel(textAlignment: .right, fontSize: 15, text: "Make")
     let modelLabel          = TitleLabel(textAlignment: .right, fontSize: 15, text: "Model")
     let shutterSpeedLabel   = TitleLabel(textAlignment: .right, fontSize: 15, text: "Shutter Speed")
@@ -88,7 +88,7 @@ class InfoView: UIView {
         stackView.backgroundColor = .white
         return stackView
     }()
-
+    
     lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("Close", for: .normal)
@@ -111,7 +111,7 @@ class InfoView: UIView {
         line.backgroundColor = .white
         return line
     }()
-
+    
     func configureInfoView() {
         self.addSubview(dismissButton)
         self.addSubview(infoLabel)
@@ -152,8 +152,6 @@ class InfoView: UIView {
     }
     
     func addInfo(of photo: Photo) {
-        self.makeSubLabel.text          = photo.exif?.make ?? "-"
-        self.modelSubLabel.text         = photo.exif?.model ?? "-"
         if let shutter = photo.exif?.exposureTime {
             self.shutterSpeedSubLabel.text  = "\(shutter)s"
         } else { self.shutterSpeedSubLabel.text = "-" }
@@ -170,6 +168,8 @@ class InfoView: UIView {
             self.isoSubLabel.text  = "\(aperture)"
         } else { self.isoSubLabel.text = "-" }
         
+        self.makeSubLabel.text          = photo.exif?.make ?? "-"
+        self.modelSubLabel.text         = photo.exif?.model ?? "-"
         self.descriptionLabel.text      = photo.description ?? "none"
         self.dimensionsSubLabel.text    = "\(photo.width) x \(photo.height)"
         self.publishedSubLabel.text     = photo.createdAt.convertToDisplayFormat()
@@ -187,7 +187,7 @@ class InfoView: UIView {
                     make.top.equalTo(line.snp.bottom).offset(20)
                     make.height.equalToSuperview().offset(-70)
                 }
-                InfoView.height = 350
+                InfoView.height = 420
             } else {
                 mapView.removeFromSuperview()
                 addSubview(mapView)
@@ -208,9 +208,8 @@ class InfoView: UIView {
                     make.leading.trailing.equalToSuperview().inset(20)
                     make.height.equalToSuperview().offset(-70)
                 }
-                InfoView.height = 550
+                InfoView.height = 620
             }
-            
         } else {
             for view in [line2, descriptionLabel, mainVertivalStackView] {
                 view.removeFromSuperview()
@@ -232,7 +231,7 @@ class InfoView: UIView {
                     make.top.equalTo(line2.snp.bottom).offset(20)
                     make.height.equalToSuperview().offset(-70)
                 }
-                InfoView.height = 400
+                InfoView.height = 470
             } else {
                 mapView.removeFromSuperview()
                 addSubview(mapView)
@@ -255,9 +254,9 @@ class InfoView: UIView {
                     make.top.equalTo(line2.snp.bottom).offset(20)
                     make.height.equalToSuperview().offset(-70)
                 }
-                InfoView.height = 600
+                InfoView.height = 700
             }
-           
+            
         }
     }
     

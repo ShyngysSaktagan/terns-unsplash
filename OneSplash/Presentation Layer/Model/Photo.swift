@@ -24,6 +24,14 @@ struct Photo: Codable, Identifiable {
     let links: Links?
 }
 
+struct PhotoURLs: Codable {
+    let raw: String
+    let full: String
+    let regular: String
+    let small: String
+    let thumb: String
+}
+
 struct Exif: Codable {
     let make: String?
     let model: String?

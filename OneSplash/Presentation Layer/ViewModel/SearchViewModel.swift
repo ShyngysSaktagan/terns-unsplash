@@ -10,10 +10,9 @@ class SearchViewModel {
     
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
-    var photos: [Photo] = []
-    var demoPhotos: [Photo] = []
-    var users: [User] = []
-    var collections: [Collection] = []
+    var photos: [Photo]             = []
+    var users: [User]               = []
+    var collections: [Collection]   = []
     var searchText: String?
     
     init(service: UnsplashService) {

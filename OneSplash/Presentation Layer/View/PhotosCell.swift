@@ -10,16 +10,18 @@ import UIKit
 import SnapKit
 
 class PhotosCell: UITableViewCell {
-
+    
     let photoView = UIImageView()
     
+    var index = 1
+    
     let button: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitleColor(.white, for: .normal)
+        let button              = UIButton(type: .system)
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .heavy)
+        button.setTitleColor(.white, for: .normal)
         return button
     }()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()

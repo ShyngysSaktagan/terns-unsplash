@@ -10,24 +10,24 @@ import UIKit
 
 class ProfileViewModel {
     let service : UnsplashService
-    var didLoadTableItems: (() -> Void)?
-    var photos: [Photo] = []
-    var likes: [Photo] = []
-    var collections: [Collection] = []
+    var photos: [Photo]             = []
+    var likes: [Photo]              = []
+    var collections: [Collection]   = []
     var user: User?
     var username: String
+    var didLoadTableItems: (() -> Void)?
     
     init(service: UnsplashService, username: String) {
-        self.service = service
-        self.username = username.lowercased()
+        self.service    = service
+        self.username   = username.lowercased()
     }
     
     func getUserPhotos() {
         service.getUserPhotos(username: username, success: { [weak self] data in
             self?.photos.append(contentsOf: data)
             self?.didLoadTableItems?()
-        }, failure: { error in
-            print(error)
+            }, failure: { error in
+                print(error)
         })
     }
     
@@ -35,8 +35,8 @@ class ProfileViewModel {
         service.getUserLikes(username: username, success: { [weak self] data in
             self?.likes.append(contentsOf: data)
             self?.didLoadTableItems?()
-        }, failure: { error in
-            print(error)
+            }, failure: { error in
+                print(error)
         })
     }
     
@@ -44,8 +44,8 @@ class ProfileViewModel {
         service.getUserCollections(username: username, success: { [weak self] data in
             self?.collections.append(contentsOf: data)
             self?.didLoadTableItems?()
-        }, failure: { error in
-            print(error)
+            }, failure: { error in
+                print(error)
         })
     }
     
@@ -53,8 +53,8 @@ class ProfileViewModel {
         service.getUser(username: username, success: { [weak self] data in
             self?.user = data
             self?.didLoadTableItems?()
-        }, failure: { error in
-            print(error)
+            }, failure: { error in
+                print(error)
         })
     }
 }

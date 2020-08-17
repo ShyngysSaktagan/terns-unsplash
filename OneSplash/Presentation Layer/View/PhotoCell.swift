@@ -11,8 +11,8 @@ import SnapKit
 
 class PhotoCell: UICollectionViewCell {
     let imageView : UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        let imageView           = UIImageView()
+        imageView.contentMode   = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         return imageView
     }()

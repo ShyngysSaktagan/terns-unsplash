@@ -21,8 +21,8 @@ class PhotoViewModel {
         service.getPhoto(id: id, success: { [weak self]  data in
             self?.photo = data
             self?.didLoadTableItems?()
-        }, failure: { error in
-            print(error)
+            }, failure: { error in
+                print(error)
         })
     }
 }

@@ -27,9 +27,9 @@ class VerticalStackView: UIStackView {
     }
     
     private func configure() {
-        axis = .vertical
-        alignment = .leading
-        distribution = .fillEqually
+        axis            = .vertical
+        alignment       = .leading
+        distribution    = .fillEqually
         translatesAutoresizingMaskIntoConstraints = false
     }
 }

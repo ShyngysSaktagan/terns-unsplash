@@ -28,13 +28,13 @@ extension UIColor {
         }
         var color: UInt32 = 0
         scanner.scanHexInt32(&color)
-        let mask = 0x000000FF
-        let rred = Int(color >> 16) & mask
-        let ggreen = Int(color >> 8) & mask
-        let bblue = Int(color) & mask
-        let red   = CGFloat(rred) / 255.0
-        let green = CGFloat(ggreen) / 255.0
-        let blue  = CGFloat(bblue) / 255.0
+        let mask    = 0x000000FF
+        let rred    = Int(color >> 16) & mask
+        let ggreen  = Int(color >> 8) & mask
+        let bblue   = Int(color) & mask
+        let red     = CGFloat(rred) / 255.0
+        let green   = CGFloat(ggreen) / 255.0
+        let blue    = CGFloat(bblue) / 255.0
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
 }
@@ -45,8 +45,8 @@ extension UIImageView {
     convenience init(cornerRadius: CGFloat) {
         self.init(image: nil)
         self.layer.cornerRadius = cornerRadius
-        self.clipsToBounds = true
-        self.contentMode = .scaleAspectFill
+        self.clipsToBounds      = true
+        self.contentMode        = .scaleAspectFill
     }
     
     func load(urlString: String) {
@@ -60,14 +60,14 @@ extension UIImageView {
                 print(error!)
                 return
             }
-
+            
             DispatchQueue.main.async {
                 if let image = UIImage(data: data!) {
                     imageCache.setObject(image, forKey: urlString as NSString)
                     self.image = image
                 }
             }
-
+            
         }).resume()
     }
 }
@@ -87,30 +87,30 @@ extension UIButton {
 }
 
 extension UIViewController {
-
-func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, tintColor: UIColor, title: String, preferredLargeTitle: Bool) {
-    if #available(iOS 13.0, *) {
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.largeTitleTextAttributes                   = [.foregroundColor: largeTitleColor]
-        navBarAppearance.titleTextAttributes                        = [.foregroundColor: largeTitleColor]
-        navBarAppearance.backgroundColor                            = backgoundColor
-
-        navigationController?.navigationBar.standardAppearance      = navBarAppearance
-        navigationController?.navigationBar.compactAppearance       = navBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance    = navBarAppearance
-
-        navigationController?.navigationBar.prefersLargeTitles      = preferredLargeTitle
-        navigationController?.navigationBar.isTranslucent           = false
-        navigationController?.navigationBar.tintColor               = tintColor
-        navigationItem.title                                        = title
-
-    } else {
-        navigationController?.navigationBar.barTintColor            = backgoundColor
-        navigationController?.navigationBar.tintColor               = tintColor
-        navigationController?.navigationBar.isTranslucent           = false
-        navigationItem.title                                        = title
-    }
+    
+    func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, tintColor: UIColor, title: String, preferredLargeTitle: Bool) {
+        if #available(iOS 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.largeTitleTextAttributes                   = [.foregroundColor: largeTitleColor]
+            navBarAppearance.titleTextAttributes                        = [.foregroundColor: largeTitleColor]
+            navBarAppearance.backgroundColor                            = backgoundColor
+            
+            navigationController?.navigationBar.standardAppearance      = navBarAppearance
+            navigationController?.navigationBar.compactAppearance       = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance    = navBarAppearance
+            
+            navigationController?.navigationBar.prefersLargeTitles      = preferredLargeTitle
+            navigationController?.navigationBar.isTranslucent           = false
+            navigationController?.navigationBar.tintColor               = tintColor
+            navigationItem.title                                        = title
+            
+        } else {
+            navigationController?.navigationBar.barTintColor            = backgoundColor
+            navigationController?.navigationBar.tintColor               = tintColor
+            navigationController?.navigationBar.isTranslucent           = false
+            navigationItem.title                                        = title
+        }
     }
 }
 

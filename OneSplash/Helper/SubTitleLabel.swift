@@ -9,7 +9,7 @@
 import UIKit
 
 class SubTitleLabel: UILabel {
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -21,8 +21,8 @@ class SubTitleLabel: UILabel {
     
     init(textAlignment: NSTextAlignment, text: String) {
         super.init(frame: .zero)
-        self.text = text
-        self.textAlignment = textAlignment
+        self.text           = text
+        self.textAlignment  = textAlignment
         configure()
     }
     

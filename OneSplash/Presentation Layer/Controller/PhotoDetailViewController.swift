@@ -14,7 +14,10 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
     let viewModel: PhotoDetailViewModel
     var collection: Collection!
     var tableView = UITableView()
-
+    
+    var didSelectPhoto: (([Photo], Int) -> Void)?
+    var didSelectUser: ((String) -> Void)?
+    
     init(viewModel: PhotoDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -25,15 +28,16 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
     }
     
     override func viewDidLoad() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         super.viewDidLoad()
-        view.backgroundColor = .bcc
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+        view.backgroundColor                = .bcc
+        navigationItem.rightBarButtonItem   = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
         configureNavBar()
         configureTableView()
         fetchCollections()
         bindViewModel()
     }
-    
+
     @objc func share() {
         let actionVC = UIActivityViewController(activityItems: [collection.links?.html as Any], applicationActivities: [])
         present(actionVC, animated: true)
@@ -58,9 +62,9 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
 
     func configureTableView() {
         view.addSubview(tableView)
-        tableView.backgroundColor = .bcc
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.backgroundColor   = .bcc
+        tableView.delegate          = self
+        tableView.dataSource        = self
         tableView.register(PhotosCell.self, forCellReuseIdentifier: "cell")
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -81,9 +85,15 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? PhotosCell
         let item = viewModel.photos[indexPath.row]
         cell?.backgroundColor = UIColor( named: item.color ?? "")
-        cell?.photoView.load(urlString: item.urls.small)
-        cell?.button.setTitle(item.user.name, for: .normal)
+        cell?.photoView.load(urlString: item.urls.thumb)
+        cell?.button.setTitle(item.user.username, for: .normal)
+        cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
         return cell!
+    }
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -93,15 +103,6 @@ extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = viewModel.photos[indexPath.row]
-        let service = UnsplashService()
-        let photoViewModel = PhotoViewModel(service: service)
-        let photoViewController = PhotoViewController(viewModel: photoViewModel)
-        photoViewController.prifileName.setTitle(item.user.name, for: .normal)
-        photoViewController.photos = viewModel.photos
-        photoViewController.indexPathToScroll = indexPath.row
-        photoViewController.modalPresentationStyle = .fullScreen
-        photoViewController.photoStarterDelegate = self
-        present(photoViewController, animated: true)
+        self.didSelectPhoto?(viewModel.photos, indexPath.row)
     }
 }

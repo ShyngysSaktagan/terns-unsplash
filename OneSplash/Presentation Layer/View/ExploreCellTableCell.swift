@@ -10,26 +10,23 @@ import UIKit
 
 class ExploreCellTableCell: UITableViewCell {
     let collectionView: UICollectionView = {
-        let layout = BetterSnappingLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .bcc
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 8)
+        let layout                  = BetterSnappingLayout()
+        layout.scrollDirection      = .horizontal
+        let collectionView              = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor  = .bcc
+        collectionView.contentInset     = .init(top: 0, left: 16, bottom: 0, right: 8)
         collectionView.register(ExploreCell.self, forCellWithReuseIdentifier: "cell")
-        
-//        collectionView.automaticallyAdjustsScrollViewInsets = false
-
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
     let collectionView1: UICollectionView = {
         let layout = BetterSnappingLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .bcc
+        layout.scrollDirection          = .horizontal
+        let collectionView              = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor  = .bcc
+        collectionView.contentInset     = .init(top: 0, left: 16, bottom: 0, right: 8)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 8)
         collectionView.register(ExploreCell.self, forCellWithReuseIdentifier: "cell")
         return collectionView
     }()
@@ -40,7 +37,6 @@ class ExploreCellTableCell: UITableViewCell {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
     }
     
     required init?(coder: NSCoder) {
