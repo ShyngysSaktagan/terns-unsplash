@@ -45,7 +45,6 @@
 		7EFFB50C24EB4D01007B1726 /* Data+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB50B24EB4D01007B1726 /* Data+Ext.swift */; };
 		7EFFB50E24EB4D1D007B1726 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB50D24EB4D1D007B1726 /* String+Ext.swift */; };
 		7EFFB51624EB4F11007B1726 /* EmptyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB51524EB4F11007B1726 /* EmptyMessage.swift */; };
-		7EFFB51824EB5834007B1726 /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB51724EB5834007B1726 /* UIButton+Ext.swift */; };
 		8848218403177CA5C981A38D /* Pods_OneSplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 557F2207D3FF3C5286C6222E /* Pods_OneSplash.framework */; };
 		9C07CB5B24D93FCA00DD39DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */; };
 		9C07CB5D24D93FCA00DD39DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */; };
@@ -99,7 +98,6 @@
 		7EFFB50B24EB4D01007B1726 /* Data+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Ext.swift"; sourceTree = "<group>"; };
 		7EFFB50D24EB4D1D007B1726 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		7EFFB51524EB4F11007B1726 /* EmptyMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyMessage.swift; sourceTree = "<group>"; };
-		7EFFB51724EB5834007B1726 /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
 		9C07CB5724D93FCA00DD39DF /* OneSplash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneSplash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -361,7 +359,6 @@
 				7EFFB50824EB4CE0007B1726 /* UIVIewController+Ext.swift */,
 				7EFFB50B24EB4D01007B1726 /* Data+Ext.swift */,
 				7EFFB50D24EB4D1D007B1726 /* String+Ext.swift */,
-				7EFFB51724EB5834007B1726 /* UIButton+Ext.swift */,
 			);
 			path = Exntention;
 			sourceTree = "<group>";
@@ -649,7 +646,6 @@
 				7EFFB4DA24E8C724007B1726 /* SearchViewController.swift in Sources */,
 				7EFFB4E224E95382007B1726 /* AppCordinator.swift in Sources */,
 				7EFFB50524EB4C93007B1726 /* UIImageView+Ext.swift in Sources */,
-				7EFFB51824EB5834007B1726 /* UIButton+Ext.swift in Sources */,
 				7E85BF4D24E34618003AC7D6 /* SubTitleLabel.swift in Sources */,
 				7EFFB51624EB4F11007B1726 /* EmptyMessage.swift in Sources */,
 				7EFFB50724EB4CBD007B1726 /* UIImage+Ext.swift in Sources */,

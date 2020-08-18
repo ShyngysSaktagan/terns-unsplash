@@ -29,10 +29,11 @@ class AppCoordinator: Coordinator {
     }
     
     // MARK: Main Page
+    
     private func showMainPage(mainViewViewModel: MainScreenViewModel, photoViewModel: CollectionPhotoViewModel, searchViewModel: SearchViewModel) {
         let page = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel,
             didSelectUser: { [weak self] username in
-                self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+                self?.showProfilePage(viewModel: ProfileViewModel(service: UnsplashService(), username: username))
             }, didSelectPhoto: { [weak self] photos, index in
                 self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
             }, didSelectCollection: { [weak self] collections, index in
@@ -45,7 +46,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectUser = { [weak self] (username) in
-            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+            self?.showProfilePage(viewModel: ProfileViewModel(service: UnsplashService(), username: username))
         }
         
         page.didSelectPhoto = { [weak self] photos, index in
@@ -60,7 +61,7 @@ class AppCoordinator: Coordinator {
     }
     
     // MARK: Profile Page
-    func showProfilePage(username: String, viewModel: ProfileViewModel) {
+    func showProfilePage(viewModel: ProfileViewModel) {
         let page = ProfileViewController(viewModel: viewModel)
         
         self.startIndex = { [weak page] index in
@@ -68,7 +69,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectUser = { [weak self] (username) in
-            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+            self?.showProfilePage(viewModel: ProfileViewModel(service: UnsplashService(), username: username))
         }
         
         page.didSelectLike = { [weak self] photos, index in
@@ -97,7 +98,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectUser = { [weak self] (username) in
-            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+            self?.showProfilePage(viewModel: ProfileViewModel(service: UnsplashService(), username: username))
         }
         
         page.photos = photos
@@ -120,7 +121,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectUser = { [weak self] (username) in
-            self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+            self?.showProfilePage(viewModel: ProfileViewModel(service: UnsplashService(), username: username))
         }
         
         page.collection = item

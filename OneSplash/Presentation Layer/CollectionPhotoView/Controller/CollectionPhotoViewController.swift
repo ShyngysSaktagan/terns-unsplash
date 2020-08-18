@@ -14,6 +14,7 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
 // MARK: - Class Properties
     
     let viewModel: CollectionPhotoViewModel
+    // collectionView нужен для того чтобы брать ее id и через id брать фото из коллоекций
     var collection: Collection!
     private var tableView = UITableView()
     
@@ -52,7 +53,7 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
 // MARK: - Functions
     
     private func configureNavigationItem() {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem    = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem   = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
     }
     
@@ -105,8 +106,7 @@ extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CollectionPhotoCell
         let item = viewModel.photos[indexPath.row]
-        cell?.backgroundColor = UIColor( named: item.color ?? "")
-        cell?.photoView.load(urlString: item.urls.small)
+        cell?.item = item
         cell?.button.setTitle(item.user.username, for: .normal)
         cell?.button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
         return cell!

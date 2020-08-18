@@ -8,6 +8,9 @@
 
 import UIKit
 
+// содержыт в себе photos, likes, collections и также user чтобы отобрать данные users
+// и для каждого case-a cсегмент контроллера есть page number и requestPerforming для обновление tableView когда Скроллнули до низа 
+
 class ProfileViewModel {
     let service : UnsplashService
     var photos: [Photo]             = []

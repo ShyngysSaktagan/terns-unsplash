@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 var imageCache = NSCache<NSString, AnyObject>()
 
@@ -23,20 +24,17 @@ extension UIImageView {
             self.image = image
             return
         }
-        guard let url = URL(string: urlString) else {return}
-        URLSession.shared.dataTask(with: url, completionHandler: { (data, _, error) in
-            if error != nil {
-                print(error!)
-                return
-            }
-            
-            DispatchQueue.main.async {
+        
+        AF.request(urlString, method: .get).response { (response) in
+            switch response.result {
+            case .success(let data):
                 if let image = UIImage(data: data!) {
                     imageCache.setObject(image, forKey: urlString as NSString)
                     self.image = image
                 }
+            case .failure(let error):
+                print(error)
             }
-            
-        }).resume()
+        }
     }
 }

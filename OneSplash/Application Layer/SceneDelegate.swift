@@ -30,12 +30,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().shadowImage                = UIImage()
         UIBarButtonItem.appearance().tintColor                  = .white
-        UINavigationBar.appearance().isTranslucent              = true
-        UINavigationBar.appearance().titleTextAttributes        = [.foregroundColor: UIColor.white]
-        UINavigationBar.appearance().largeTitleTextAttributes   = [.foregroundColor: UIColor.white]
-        UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white],
-                                                               for: .selected)
-        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+        UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        
     }
     
 	func sceneDidDisconnect(_ scene: UIScene) {

@@ -12,7 +12,6 @@ class ParalaxTableView: UITableView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         guard let header = tableHeaderView else { return }
         let offsetY = contentOffset.y
         header.alpha = (100 - offsetY) / 100
