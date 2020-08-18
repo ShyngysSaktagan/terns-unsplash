@@ -93,7 +93,7 @@ class AppCoordinator: Coordinator {
         let item = photos[index]
         let page = PhotoViewController(viewModel: viewModel)
         
-        page.didSaveButtonClicked = { [weak self] (index) in
+        page.didExitClicked = { [weak self] (index) in
             self?.changeContact?(index)
             self?.navigationController.popViewController(animated: true)
         }

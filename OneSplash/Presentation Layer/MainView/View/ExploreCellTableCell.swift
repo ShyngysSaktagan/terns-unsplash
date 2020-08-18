@@ -20,17 +20,6 @@ class ExploreCellTableCell: UITableViewCell {
         return collectionView
     }()
     
-    let collectionView1: UICollectionView = {
-        let layout = BetterSnappingLayout()
-        layout.scrollDirection          = .horizontal
-        let collectionView              = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor  = .bcc
-        collectionView.contentInset     = .init(top: 0, left: 16, bottom: 0, right: 8)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(ExploreCell.self, forCellWithReuseIdentifier: "cell")
-        return collectionView
-    }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(collectionView)

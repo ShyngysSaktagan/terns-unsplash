@@ -11,6 +11,14 @@ import SnapKit
 
 class UserCell: UITableViewCell {
     
+    var item: User? {
+        didSet {
+            profileImage.load(urlString: item?.profileImage?.medium ?? "")
+            nameLabel.text = item?.name
+            usernameLabel.text = item?.username
+        }
+    }
+    
     let profileImage    = UIImageView(cornerRadius: 15)
     let usernameLabel   = TitleLabel(textAlignment: .left, fontSize: 18, weight: .bold, text: "username", color: .white)
     let nameLabel       = TitleLabel(textAlignment: .left, fontSize: 13, weight: .medium, text: "name", color: .gray)
@@ -28,9 +36,15 @@ class UserCell: UITableViewCell {
             make.leading.equalTo(profileImage.snp.trailing).offset(25)
             make.centerY.equalTo(profileImage.snp.centerY)
         }
+        configure() 
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        backgroundColor = .clear
+        selectionStyle = .none
     }
 }

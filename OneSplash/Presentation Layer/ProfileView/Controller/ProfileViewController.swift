@@ -10,69 +10,19 @@ import UIKit
 
 class ProfileViewController: PhotoShowerViewControllers {
     
-    let viewModel: ProfileViewModel
-    let tableView = ParalaxTableView()
-    let tableViewHeader = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 145))
+    // MARK: - Class Properties
     
-    init(viewModel: ProfileViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
+    let viewModel: ProfileViewModel
+    let tableView           = ParalaxTableView()
+    let tableViewHeader     = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 145))
+    let usernameLabel       = TitleLabel(textAlignment: .left, fontSize: 25, weight: .bold)
+    let userlocationLabel   = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
+    let userURL             = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
     
     var didSelectUser: ((String) -> Void)?
     var didSelectLike: (([Photo], Int) -> Void)?
     var didSelectCollection: (([Collection], Int) -> Void)?
     var didSelectPhoto: (([Photo], Int) -> Void)?
-    
-    func fetchViewModelDatas() {
-        viewModel.getUser()
-        viewModel.getUserLikes()
-        viewModel.getUserPhotos()
-        viewModel.getUserCollections()
-    }
-    
-    private func bindViewModel() {
-        viewModel.didLoadTableItems = { [weak self] in
-            self?.tableView.reloadData()
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        onceOnly = false
-        start(tableView: self.tableView, section: 0)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    let userPicture : UIImageView = {
-        let imageView = UIImageView(cornerRadius: 16)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .white
-        return imageView
-    }()
-    
-    func configureHeaderView() {
-        [usernameLabel, userLocationStackView, userPicture].forEach { tableViewHeader.addSubview($0) }
-        userPicture.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(15)
-            make.height.width.equalTo(60)
-        }
-        usernameLabel.snp.makeConstraints { make in
-            make.top.equalTo(userPicture.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(15)
-        }
-        userLocationStackView.snp.makeConstraints { make in
-            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().offset(15)
-        }
-    }
-    
-    let usernameLabel = TitleLabel(textAlignment: .left, fontSize: 25, weight: .bold)
-    let userlocationLabel = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
-    let userURL = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
     
     let segmentController: UISegmentedControl = {
         let segmentController = UISegmentedControl(items: ["Photo", "Likes", "Collections"])
@@ -81,6 +31,13 @@ class ProfileViewController: PhotoShowerViewControllers {
         segmentController.selectedSegmentTintColor = .gray
         segmentController.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
         return segmentController
+    }()
+        
+    let userPicture : UIImageView = {
+        let imageView = UIImageView(cornerRadius: 16)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .white
+        return imageView
     }()
     
     let locationImageView: UIImageView = {
@@ -98,28 +55,73 @@ class ProfileViewController: PhotoShowerViewControllers {
         return stackView
     }()
     
-    @objc func handleSegmentChange() {
-        tableView.reloadData()
+    // MARK: - Init
+    
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - UIViewController Events
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableViewHeader.backgroundColor = .bcc
         view.backgroundColor = .bcc
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+        configureNavigationItem()
         configureHeaderView()
-        configureTableView()
         fetchViewModelDatas()
+        configureTableView()
         bindViewModel()
     }
-
-    @objc func share() {
-        let actionVC = UIActivityViewController(activityItems: [viewModel.user?.links?.html as Any], applicationActivities: [])
-        present(actionVC, animated: true)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        onceOnly = false
+        start(tableView: self.tableView, section: 0)
+    }
+    
+    // MARK: - Functions
+    
+    private func configureNavigationItem() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+    }
+    
+    private func configureHeaderView() {
+        tableViewHeader.backgroundColor = .bcc
+        [usernameLabel, userLocationStackView, userPicture].forEach { tableViewHeader.addSubview($0) }
+        userPicture.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().inset(15)
+            make.height.width.equalTo(60)
+        }
+        usernameLabel.snp.makeConstraints { make in
+            make.top.equalTo(userPicture.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().inset(15)
+        }
+        userLocationStackView.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().offset(15)
+        }
+    }
+    
+    private func fetchViewModelDatas() {
+        viewModel.getUser()
+        viewModel.getUserLikes()
+        viewModel.getUserPhotos()
+        viewModel.getUserCollections()
+    }
+    
+    private func bindViewModel() {
+        viewModel.didLoadTableItems = { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 
-    func configureTableView() {
+    private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -132,22 +134,6 @@ class ProfileViewController: PhotoShowerViewControllers {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         tableView.tableHeaderView = tableViewHeader
-    }
-    
-    func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
-        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
-        emptyStateView.tag = tag
-        emptyStateView.frame = CGRect(x: 0, y: 250, width: view.frame.width, height: view.frame.height - 350)
-        emptyStateView.isUserInteractionEnabled = true
-        view.addSubview(emptyStateView)
-    }
-    
-    func removeSubViews(tags: [Int]) {
-        for tag in tags {
-            if let viewWithTag = tableView.viewWithTag(tag) {
-                viewWithTag.removeFromSuperview()
-            }
-        }
     }
     
     func checkLabels() {
@@ -180,11 +166,29 @@ class ProfileViewController: PhotoShowerViewControllers {
             print("")
         }
     }
+    
+    // MARK: @objc functions
+    
+    @objc func handleSegmentChange() {
+        tableView.reloadData()
+    }
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        didSelectUser?(username)
+    }
+    
+    @objc func share() {
+        let actionVC = UIActivityViewController(activityItems: [viewModel.user?.links?.html as Any], applicationActivities: [])
+        present(actionVC, animated: true)
+    }
 }
+
+// MARK: - extension TableView (Delegate, DataSource)
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        removeSubViews(tags: [100,101,102])
+        removeSubViews(tags: [100,101,102], for: self.tableView)
         switch segmentController.selectedSegmentIndex {
         case 0:
             if viewModel.photos.isEmpty {
@@ -210,7 +214,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         userPicture.load(urlString: viewModel.user?.profileImage?.medium ?? "")
         usernameLabel.text = viewModel.user?.name
         userlocationLabel.text = viewModel.user?.location
@@ -219,35 +222,23 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.photos[indexPath.row]
-            cell?.photoView.load(urlString: item.urls.regular)
-            cell?.selectionStyle = .none
-            cell?.backgroundColor = UIColor(hexString: item.color!)
+            cell?.item = item
             return cell!
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.likes[indexPath.row]
-            cell?.photoView.load(urlString: item.urls.regular)
-            cell?.selectionStyle = .none
-            cell?.backgroundColor = UIColor(hexString: item.color!)
+            cell?.item = item
             cell?.button.setTitle(item.user.username, for: .normal)
             cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             return cell!
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell
             let item = viewModel.collections[indexPath.row]
-            cell?.titleLabel.text = item.title
-            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.regular)
-            cell?.selectionStyle = .none
-            cell?.backgroundColor = .clear
+            cell?.item = item
             return cell!
         default:
             return UITableViewCell()
         }
-    }
-    
-    @objc private func didTapNumber(_ sender: UIButton) {
-        let username = (sender.titleLabel?.text ?? "").lowercased()
-        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -265,10 +256,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             return 0
         }
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -294,5 +281,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             print("")
         }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
     }
 }

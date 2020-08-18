@@ -11,6 +11,13 @@ import SnapKit
 
 class CollectionViewCell: UITableViewCell {
     
+    var item: Collection? {
+        didSet {
+            titleLabel.text = item?.title
+            backgroudImage.load(urlString: item?.coverPhoto.urls.regular ?? "")
+        }
+    }
+    
     private let cover: UIView = {
         let cover                   = UIView()
         cover.backgroundColor       = UIColor(red: 0, green: 0, blue: 0, alpha: 0.35)
@@ -50,9 +57,15 @@ class CollectionViewCell: UITableViewCell {
         titleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+        configure()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        selectionStyle = .none
+        backgroundColor = .clear
     }
 }

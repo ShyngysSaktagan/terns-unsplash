@@ -11,6 +11,14 @@ import SnapKit
 
 class CollectionPhotoCell: UITableViewCell {
     
+    var item: Photo? {
+        didSet {
+            photoView.load(urlString: item?.urls.regular ?? "")
+            selectionStyle = .none
+            backgroundColor = UIColor(hexString: item?.color ?? "")
+        }
+    }
+    
     let photoView   = UIImageView()
     
     let button: UIButton = {

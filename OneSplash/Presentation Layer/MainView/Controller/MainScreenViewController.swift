@@ -12,6 +12,8 @@ import NVActivityIndicatorView
 
 class MainScreenViewController: PhotoShowerViewControllers {
     
+// MARK: - Class Properties
+    
     let mainViewViewModel: MainScreenViewModel
     let photoViewModel: CollectionPhotoViewModel
     let searchViewModel: SearchViewModel
@@ -23,6 +25,16 @@ class MainScreenViewController: PhotoShowerViewControllers {
     var didSelectUser: ((String) -> Void)?
     var didSelectCollection: (([Collection], Int) -> Void)?
     var didSelectPhoto: (([Photo], Int) -> Void)?
+    
+    private lazy var searchController: UISearchController = {
+        let searchController                = UISearchController(searchResultsController: searchViewController)
+        searchController.searchBar.delegate = searchViewController
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.showsSearchResultsController = true
+        return searchController
+    }()
+    
+// MARK: - Init
     
     init(mainViewViewModel: MainScreenViewModel,
          photoViewModel: CollectionPhotoViewModel,
@@ -46,22 +58,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var searchController: UISearchController = {
-        let searchController                = UISearchController(searchResultsController: searchViewController)
-        searchController.searchBar.delegate = searchViewController
-        searchController.obscuresBackgroundDuringPresentation = true
-        searchController.showsSearchResultsController = true
-        return searchController
-    }()
-    
-    private func bindViewModel() {
-        mainViewViewModel.didLoadTableItems = { [weak self] in
-            self?.tableView.reloadData()
-        }
-        photoViewModel.didLoadTableItems = { [weak self] in
-            self?.tableView.reloadData()
-        }
-    }
+// MARK: - UIViewController Events
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,7 +66,24 @@ class MainScreenViewController: PhotoShowerViewControllers {
         start(tableView: self.tableView, section: 1)
     }
     
-    func configureTableView() {
+    override func viewDidLoad() {
+        view.backgroundColor = .bcc
+        super.viewDidLoad()
+        setupNavigationBar()
+        configureTableView()
+        bindViewModel()
+        fetchAll()
+    }
+    
+// MARK: - Functions
+    
+    private func setupNavigationBar() {
+        definesPresentationContext      = true
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    private func configureTableView() {
         view.addSubview(tableView)
         configureNavigationBar(largeTitleColor: .bcc, backgoundColor: .bcc, tintColor: .white, title: "", preferredLargeTitle: false)
         tableView.delegate          = self
@@ -82,40 +96,29 @@ class MainScreenViewController: PhotoShowerViewControllers {
         }
     }
     
-    override func viewDidLoad() {
-        view.backgroundColor = .bcc
-        super.viewDidLoad()
-        setupNavigationBar()
-        configureTableView()
-        fetchAll()
-        bindViewModel()
+    private func bindViewModel() {
+        mainViewViewModel.didLoadTableItems = { [weak self] in
+            self?.tableView.reloadData()
+        }
+        photoViewModel.didLoadTableItems = { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
-    private func setupNavigationBar() {
-        definesPresentationContext      = true
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-    }
-    
-    func fetchAll() {
+    private func fetchAll() {
         showLoadingView()
         fetchCollections()
         fetchPhotos()
     }
     
-    func fetchCollections() {
+    private func fetchCollections() {
         mainViewViewModel.getCollections()
     }
     
-    func fetchPhotos() {
+    private func fetchPhotos() {
         photoViewModel.getNewPhotos()
     }
-    
-    let zoomImageView = UIImageView()
-    let blackBackgroud = UIView()
-    var photoView: UIImageView?
-    let navBarCover = UIView()
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY         = scrollView.contentOffset.y
         let contentHeight   = scrollView.contentSize.height
@@ -127,7 +130,16 @@ class MainScreenViewController: PhotoShowerViewControllers {
             fetchPhotos()
         }
     }
+    
+    // MARK: @objc functions
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        didSelectUser?(username)
+    }
 }
+
+// MARK: - extension TableView (Delegate, DataSource)
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -141,10 +153,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         }
          
         return headerView
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -164,18 +172,11 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell                = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? CollectionPhotoCell
             let item                = photoViewModel.photos[indexPath.row]
-            
-            cell?.photoView.load(urlString: item.urls.thumb)
+            cell?.item = item
             cell?.button.setTitle(item.user.username, for: .normal)
-            cell?.backgroundColor   = UIColor(hexString: item.color!)
             cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
             return cell!
         }
-    }
-    
-    @objc private func didTapNumber(_ sender: UIButton) {
-        let username = (sender.titleLabel?.text ?? "").lowercased()
-        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -186,7 +187,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let imageCrop   = CGFloat( item.width) / CGFloat(item.height)
             return tableView.frame.width / imageCrop
         }
-        
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -202,7 +202,13 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectPhoto?(photoViewModel.photos, indexPath.row)
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
 }
+
+// MARK: - extension CollectionView (DelegateFlowLayout, DataSource)
 
 extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     

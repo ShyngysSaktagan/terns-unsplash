@@ -11,12 +11,16 @@ import NVActivityIndicatorView
 
 class CollectionPhotoViewController: PhotoShowerViewControllers {
     
+// MARK: - Class Properties
+    
     let viewModel: CollectionPhotoViewModel
     var collection: Collection!
     var tableView = UITableView()
     
     var didSelectPhoto: (([Photo], Int) -> Void)?
     var didSelectUser: ((String) -> Void)?
+    
+// MARK: - Init
     
     init(viewModel: CollectionPhotoViewModel) {
         self.viewModel = viewModel
@@ -27,20 +31,16 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
         fatalError("init(coder:) has not been implemented")
     }
     
+// MARK: - UIViewController Events
+    
     override func viewDidLoad() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         super.viewDidLoad()
-        view.backgroundColor                = .bcc
-        navigationItem.rightBarButtonItem   = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
-        configureNavBar()
+        view.backgroundColor = .bcc
+        configureNavigationItem()
         configureTableView()
         fetchCollections()
+        configureNavBar()
         bindViewModel()
-    }
-
-    @objc func share() {
-        let actionVC = UIActivityViewController(activityItems: [collection.links?.html as Any], applicationActivities: [])
-        present(actionVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,18 +49,14 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
         start(tableView: self.tableView, section: 0)
     }
     
-    private func bindViewModel() {
-        viewModel.didLoadTableItems = { [weak self] in
-            self?.tableView.reloadData()
-        }
+// MARK: - Functions
+    
+    private func configureNavigationItem() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem   = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
     }
     
-    func fetchCollections() {
-        showLoadingView()
-        viewModel.getCollectionPhotos(id: collection.id, totalPhotos: collection.totalPhotos)
-    }
-
-    func configureTableView() {
+    private func configureTableView() {
         view.addSubview(tableView)
         tableView.backgroundColor   = .bcc
         tableView.delegate          = self
@@ -71,10 +67,35 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
         }
     }
     
-    func configureNavBar() {
+    private func fetchCollections() {
+        showLoadingView()
+        viewModel.getCollectionPhotos(id: collection.id, totalPhotos: collection.totalPhotos)
+    }
+
+    private func configureNavBar() {
         configureNavigationBar(largeTitleColor: .white, backgoundColor: .bcc, tintColor: .white, title: collection.title, preferredLargeTitle: false)
     }
+    
+    private func bindViewModel() {
+        viewModel.didLoadTableItems = { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
+    // MARK: @objc functions
+    
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        didSelectUser?(username)
+    }
+
+    @objc func share() {
+        let actionVC = UIActivityViewController(activityItems: [collection.links?.html as Any], applicationActivities: [])
+        present(actionVC, animated: true)
+    }
 }
+
+// MARK: - extension TableView (Delegate, DataSource)
 
 extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,11 +110,6 @@ extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSou
         cell?.button.setTitle(item.user.username, for: .normal)
         cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
         return cell!
-    }
-    
-    @objc private func didTapNumber(_ sender: UIButton) {
-        let username = (sender.titleLabel?.text ?? "").lowercased()
-        didSelectUser?(username)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

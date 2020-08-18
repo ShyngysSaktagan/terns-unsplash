@@ -26,6 +26,7 @@
 		7EE65C2C24DA225700362B7F /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE65C2B24DA225700362B7F /* ExploreCell.swift */; };
 		7EF5CDA424DE16F300222CA3 /* ExploreCellTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5CDA324DE16F300222CA3 /* ExploreCellTableCell.swift */; };
 		7EF5CDA624DF4D2800222CA3 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5CDA524DF4D2800222CA3 /* PhotoViewController.swift */; };
+		7EF8D1EC24EB9F0900BD60BB /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8D1EB24EB9F0900BD60BB /* CustomButton.swift */; };
 		7EFFB4D024E726B2007B1726 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB4CF24E726B2007B1726 /* ProfileViewController.swift */; };
 		7EFFB4D224E73CE2007B1726 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB4D124E73CE2007B1726 /* ProfileViewModel.swift */; };
 		7EFFB4D424E7749C007B1726 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFFB4D324E7749C007B1726 /* CollectionViewCell.swift */; };
@@ -79,6 +80,7 @@
 		7EE65C2B24DA225700362B7F /* ExploreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
 		7EF5CDA324DE16F300222CA3 /* ExploreCellTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreCellTableCell.swift; sourceTree = "<group>"; };
 		7EF5CDA524DF4D2800222CA3 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		7EF8D1EB24EB9F0900BD60BB /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		7EFFB4CF24E726B2007B1726 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		7EFFB4D124E73CE2007B1726 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		7EFFB4D324E7749C007B1726 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
@@ -135,17 +137,36 @@
 		7E6790B224DA417B0076FABA /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				7EFFB50F24EB4D5F007B1726 /* Utilities */,
-				7EFFB4FF24EB4C09007B1726 /* Exntention */,
 				7EFFB4E924EB46E3007B1726 /* Custom Views */,
+				7EFFB4FF24EB4C09007B1726 /* Exntention */,
 				7E85BF3E24E24103003AC7D6 /* PhotoShowerViewControllers.swift */,
+				7EFFB50F24EB4D5F007B1726 /* Utilities */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		7EF8D1EA24EB9EF400BD60BB /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				7EF8D1EB24EB9F0900BD60BB /* CustomButton.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
+		7EF8D1ED24EBA82B00BD60BB /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				9C07CB6624D93FCE00DD39DF /* Assets.xcassets */,
+				9C07CB6B24D93FCE00DD39DF /* Info.plist */,
+				9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		7EFFB4E924EB46E3007B1726 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				7EF8D1EA24EB9EF400BD60BB /* Button */,
 				7EFFB51424EB4E0D007B1726 /* MapView */,
 				7EFFB51324EB4E05007B1726 /* TableView */,
 				7EFFB51224EB4DF6007B1726 /* StackView */,
@@ -158,8 +179,8 @@
 		7EFFB4EA24EB47BC007B1726 /* MainView */ = {
 			isa = PBXGroup;
 			children = (
-				7EFFB4EF24EB48CA007B1726 /* Model */,
 				7EFFB4EE24EB48B5007B1726 /* Controller */,
+				7EFFB4EF24EB48CA007B1726 /* Model */,
 				7EFFB4ED24EB48B3007B1726 /* View */,
 				7EFFB4EB24EB48A9007B1726 /* ViewModel */,
 			);
@@ -206,9 +227,9 @@
 			isa = PBXGroup;
 			children = (
 				7EFFB4F424EB490D007B1726 /* Controller */,
-				7EFFB4F324EB4907007B1726 /* ViewModel */,
 				7EFFB4F224EB4901007B1726 /* Model */,
 				7EFFB4F124EB48F3007B1726 /* View */,
+				7EFFB4F324EB4907007B1726 /* ViewModel */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -248,10 +269,10 @@
 		7EFFB4F524EB4A26007B1726 /* CollectionPhotoView */ = {
 			isa = PBXGroup;
 			children = (
-				7EFFB4F924EB4A36007B1726 /* Model */,
 				7EFFB4F824EB4A32007B1726 /* Controller */,
-				7EFFB4F724EB4A2C007B1726 /* VoewModel */,
+				7EFFB4F924EB4A36007B1726 /* Model */,
 				7EFFB4F624EB4A2A007B1726 /* View */,
+				7EFFB4F724EB4A2C007B1726 /* ViewModel */,
 			);
 			path = CollectionPhotoView;
 			sourceTree = "<group>";
@@ -264,12 +285,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		7EFFB4F724EB4A2C007B1726 /* VoewModel */ = {
+		7EFFB4F724EB4A2C007B1726 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				7E818EA524DB3EB200851D1D /* CollectionPhotoViewModel.swift */,
 			);
-			path = VoewModel;
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		7EFFB4F824EB4A32007B1726 /* Controller */ = {
@@ -291,10 +312,10 @@
 		7EFFB4FA24EB4A83007B1726 /* PhotoView */ = {
 			isa = PBXGroup;
 			children = (
-				7EFFB4FE24EB4A93007B1726 /* ViewModel */,
-				7EFFB4FD24EB4A8F007B1726 /* Model */,
 				7EFFB4FC24EB4A8B007B1726 /* Controller */,
+				7EFFB4FD24EB4A8F007B1726 /* Model */,
 				7EFFB4FB24EB4A89007B1726 /* View */,
+				7EFFB4FE24EB4A93007B1726 /* ViewModel */,
 			);
 			path = PhotoView;
 			sourceTree = "<group>";
@@ -427,14 +448,12 @@
 		9C07CB5924D93FCA00DD39DF /* OneSplash */ = {
 			isa = PBXGroup;
 			children = (
-				7E6790B224DA417B0076FABA /* Helper */,
 				9C07CB7424D943AD00DD39DF /* Application Layer */,
 				9C07CB7624D943D000DD39DF /* Business Layer */,
-				9C07CB7724D9440900DD39DF /* Presentation Layer */,
 				9C1E8F8124D97C7A00AE44A8 /* Data Access Layer */,
-				9C07CB6624D93FCE00DD39DF /* Assets.xcassets */,
-				9C07CB6824D93FCE00DD39DF /* LaunchScreen.storyboard */,
-				9C07CB6B24D93FCE00DD39DF /* Info.plist */,
+				7E6790B224DA417B0076FABA /* Helper */,
+				9C07CB7724D9440900DD39DF /* Presentation Layer */,
+				7EF8D1ED24EBA82B00BD60BB /* Support */,
 			);
 			path = OneSplash;
 			sourceTree = "<group>";
@@ -442,10 +461,10 @@
 		9C07CB7424D943AD00DD39DF /* Application Layer */ = {
 			isa = PBXGroup;
 			children = (
-				9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */,
-				9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */,
 				7EFFB4E124E95381007B1726 /* AppCordinator.swift */,
+				9C07CB5A24D93FCA00DD39DF /* AppDelegate.swift */,
 				7EFFB4E324E953E0007B1726 /* Coordinator.swift */,
+				9C07CB5C24D93FCA00DD39DF /* SceneDelegate.swift */,
 			);
 			path = "Application Layer";
 			sourceTree = "<group>";
@@ -462,10 +481,10 @@
 		9C07CB7724D9440900DD39DF /* Presentation Layer */ = {
 			isa = PBXGroup;
 			children = (
-				7EFFB4FA24EB4A83007B1726 /* PhotoView */,
 				7EFFB4F524EB4A26007B1726 /* CollectionPhotoView */,
-				7EFFB4F024EB48DD007B1726 /* ProfileView */,
 				7EFFB4EA24EB47BC007B1726 /* MainView */,
+				7EFFB4FA24EB4A83007B1726 /* PhotoView */,
+				7EFFB4F024EB48DD007B1726 /* ProfileView */,
 			);
 			path = "Presentation Layer";
 			sourceTree = "<group>";
@@ -650,6 +669,7 @@
 				7EFFB4D224E73CE2007B1726 /* ProfileViewModel.swift in Sources */,
 				7EFFB4D624E793BC007B1726 /* EmptyStateView.swift in Sources */,
 				7E6790C724DA6E8B0076FABA /* BetterSnappingLayout.swift in Sources */,
+				7EF8D1EC24EB9F0900BD60BB /* CustomButton.swift in Sources */,
 				7E85BF4B24E34609003AC7D6 /* TitleLabel.swift in Sources */,
 				7EFFB4E024E8F39F007B1726 /* UserCell.swift in Sources */,
 				7E85BF4F24E34625003AC7D6 /* VerticalStackView.swift in Sources */,
@@ -793,7 +813,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J78N6PTC3Q;
-				INFOPLIST_FILE = OneSplash/Info.plist;
+				INFOPLIST_FILE = OneSplash/Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -812,7 +832,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J78N6PTC3Q;
-				INFOPLIST_FILE = OneSplash/Info.plist;
+				INFOPLIST_FILE = OneSplash/Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

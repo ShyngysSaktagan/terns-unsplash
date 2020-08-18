@@ -44,4 +44,20 @@ class PhotoShowerViewControllers: UIViewController {
         }
         activityIndicator.startAnimating()
     }
+    
+    func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
+        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
+        emptyStateView.tag = tag
+        emptyStateView.frame = CGRect(x: 0, y: 250, width: view.frame.width, height: view.frame.height - 350)
+        emptyStateView.isUserInteractionEnabled = true
+        view.addSubview(emptyStateView)
+    }
+    
+    func removeSubViews(tags: [Int], for tableView: UITableView) {
+        for tag in tags {
+            if let viewWithTag = tableView.viewWithTag(tag) {
+                viewWithTag.removeFromSuperview()
+            }
+        }
+    }
 }
