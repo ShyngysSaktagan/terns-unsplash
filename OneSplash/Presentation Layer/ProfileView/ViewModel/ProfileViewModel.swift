@@ -16,6 +16,12 @@ class ProfileViewModel {
     var user: User?
     var username: String
     var didLoadTableItems: (() -> Void)?
+    var photosCurrentPage = 1
+    var collectionsCurrentPage = 1
+    var likesCurrentPage = 1
+    var isPhotosRequestPerforming = false
+    var isCollectionRequestPerforming = false
+    var isLikesRequestPerforming = false
     
     init(service: UnsplashService, username: String) {
         self.service    = service
@@ -23,7 +29,10 @@ class ProfileViewModel {
     }
     
     func getUserPhotos() {
-        service.getUserPhotos(username: username, success: { [weak self] data in
+        isPhotosRequestPerforming = true
+        service.getUserPhotos(username: username, page: photosCurrentPage, success: { [weak self] data in
+            self?.isPhotosRequestPerforming = false
+            self?.photosCurrentPage += 1
             self?.photos.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in
@@ -32,7 +41,10 @@ class ProfileViewModel {
     }
     
     func getUserLikes() {
-        service.getUserLikes(username: username, success: { [weak self] data in
+        isLikesRequestPerforming = true
+        service.getUserLikes(username: username, page: likesCurrentPage, success: { [weak self] data in
+            self?.isLikesRequestPerforming = false
+            self?.likesCurrentPage += 1
             self?.likes.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in
@@ -41,7 +53,10 @@ class ProfileViewModel {
     }
     
     func getUserCollections() {
-        service.getUserCollections(username: username, success: { [weak self] data in
+        isCollectionRequestPerforming = true
+        service.getUserCollections(username: username, page: collectionsCurrentPage, success: { [weak self] data in
+            self?.isCollectionRequestPerforming = false
+            self?.collectionsCurrentPage += 1
             self?.collections.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in

@@ -14,13 +14,22 @@ class SearchViewModel {
     var users: [User]               = []
     var collections: [Collection]   = []
     var searchText: String?
+    var photosCurrentPage = 1
+    var collectionsCurrentPage = 1
+    var usersCurrentPage = 1
+    var isPhotosRequestPerforming = false
+    var isCollectionRequestPerforming = false
+    var isUserRequestPerforming = false
     
     init(service: UnsplashService) {
         self.service = service
     }
     
     func searchUsers(query: String) {
-        service.searchUsers(query: query, success: { [weak self] data in
+        isUserRequestPerforming = false
+        service.searchUsers(query: query, page: usersCurrentPage, success: { [weak self] data in
+            self?.isUserRequestPerforming = false
+            self?.usersCurrentPage += 1
             self?.users.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in
@@ -29,7 +38,10 @@ class SearchViewModel {
     }
     
     func searchPhotos(query: String) {
-        service.searchPhotos(query: query, success: { [weak self] data in
+        isPhotosRequestPerforming = false
+        service.searchPhotos(query: query, page: photosCurrentPage, success: { [weak self] data in
+            self?.isPhotosRequestPerforming = true
+            self?.photosCurrentPage += 1
             self?.photos.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in
@@ -38,7 +50,10 @@ class SearchViewModel {
     }
     
     func searchCollections(query: String) {
-        service.searchCollections(query: query, success: { [weak self] data in
+        isCollectionRequestPerforming = false
+        service.searchCollections(query: query, page: collectionsCurrentPage, success: { [weak self] data in
+            self?.isCollectionRequestPerforming = true
+            self?.collectionsCurrentPage += 1
             self?.collections.append(contentsOf: data)
             self?.didLoadTableItems?()
             }, failure: { error in

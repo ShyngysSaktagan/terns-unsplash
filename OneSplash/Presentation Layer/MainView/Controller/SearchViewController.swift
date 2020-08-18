@@ -11,6 +11,16 @@ import UIKit
 class SearchViewController: PhotoShowerViewControllers {
     
     let viewModel: SearchViewModel
+    var searchText = ""
+    
+    var didSelectUser: ((String) -> Void)?
+    var didSelectCollection: (([Collection], Int) -> Void)?
+    var didSelectPhoto: (([Photo], Int) -> Void)?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchText = ""
+    }
     
     private lazy var segmentController: UISegmentedControl = {
         let segmentController = UISegmentedControl(items: ["Photo", "Collections", "Users"])
@@ -23,13 +33,24 @@ class SearchViewController: PhotoShowerViewControllers {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
+        tableView.register(CollectionPhotoCell.self, forCellReuseIdentifier: "photos")
         tableView.register(CollectionViewCell.self, forCellReuseIdentifier: "collections")
         tableView.register(UserCell.self, forCellReuseIdentifier: "users")
-//        tableView.tableFooterView = UIView()
         return tableView
     }()
 
+    init(viewModel: SearchViewModel,
+         didSelectUser: @escaping (String) -> Void,
+         didSelectPhoto: @escaping ([Photo], Int) -> Void,
+         didSelectCollection: @escaping ([Collection], Int) -> Void) {
+        self.viewModel = viewModel
+
+        self.didSelectUser = didSelectUser
+        self.didSelectPhoto = didSelectPhoto
+        self.didSelectCollection = didSelectCollection
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -41,7 +62,7 @@ class SearchViewController: PhotoShowerViewControllers {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        configureTableView()
         bindViewModel()
     }
     
@@ -49,19 +70,41 @@ class SearchViewController: PhotoShowerViewControllers {
         tableView.reloadData()
     }
     
-    func setupUI() {
+    func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .bcc
         view.backgroundColor = .bcc
         [segmentController, tableView].forEach { view.addSubview($0) }
         segmentController.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(8)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(segmentController.snp.bottom).offset(8)
             make.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) else {
+            return
+        }
+        switch segmentController.selectedSegmentIndex {
+        case 0:
+            if viewModel.isPhotosRequestPerforming {
+                viewModel.searchPhotos(query: searchText)
+            }
+        case 1:
+            if viewModel.isCollectionRequestPerforming {
+                viewModel.searchCollections(query: searchText)
+            }
+        case 2:
+            if viewModel.isUserRequestPerforming {
+                viewModel.searchUsers(query: searchText)
+            }
+        default:
+            print("")
         }
     }
     
@@ -71,58 +114,58 @@ class SearchViewController: PhotoShowerViewControllers {
         }
     }
     
-//    func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
-//        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
-//        emptyStateView.tag = tag
-//        emptyStateView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height)
-//        emptyStateView.isUserInteractionEnabled = true
-//        view.addSubview(emptyStateView)
-//    }
-//
-//    func removeSubViews(tags: [Int]) {
-//        for tag in tags {
-//            if let viewWithTag = tableView.viewWithTag(tag) {
-//                viewWithTag.removeFromSuperview()
-//            }
-//        }
-//    }
+    func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
+        let emptyStateView  = EmptyStateView(message: message, logoImage: image)
+        emptyStateView.tag = tag
+        emptyStateView.frame = CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height-400)
+        emptyStateView.isUserInteractionEnabled = true
+        view.addSubview(emptyStateView)
+    }
+
+    func removeSubViews(tags: [Int]) {
+        for tag in tags {
+            if let viewWithTag = tableView.viewWithTag(tag) {
+                viewWithTag.removeFromSuperview()
+            }
+        }
+    }
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        removeSubViews(tags: [100,101,102])
+        removeSubViews(tags: [100,101,102])
         switch segmentController.selectedSegmentIndex {
         case 0:
-//            if viewModel.photos.isEmpty {
-//                let message = "No photos"
-//                self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView, tag: 100)
-//            }
+            if viewModel.photos.isEmpty {
+                let message = "No photos"
+                self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView, tag: 100)
+            }
             print(viewModel.photos.count)
             return viewModel.photos.count
         case 1:
-//            if viewModel.users.isEmpty {
-//                let message = "No Users"
-//                self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView, tag: 101)
-//            }
+            if viewModel.users.isEmpty {
+                let message = "No Collection"
+                self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView, tag: 101)
+            }
             print(viewModel.collections.count)
             return viewModel.collections.count
             
         case 2:
-//            if viewModel.collections.isEmpty {
-//                let message = "No collections"
-//                self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
-//            }
+            if viewModel.collections.isEmpty {
+                let message = "No User"
+                self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
+            }
             print(viewModel.users.count)
             return viewModel.users.count
         default:
-            return 30
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch segmentController.selectedSegmentIndex {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.photos[indexPath.row]
             cell?.photoView.load(urlString: item.urls.regular)
             cell?.selectionStyle = .none
@@ -132,14 +175,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell
             let item = viewModel.collections[indexPath.row]
             cell?.titleLabel.text = item.title
-            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.thumb)
+            cell?.backgroudImage.load(urlString: item.coverPhoto.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = .clear
             return cell!
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "users", for: indexPath) as? UserCell
             let item = viewModel.users[indexPath.row]
-            cell?.profileImage.load(urlString: item.profileImage?.large ?? "")
+            cell?.profileImage.load(urlString: item.profileImage?.medium ?? "")
             cell?.nameLabel.text = item.name
             cell?.usernameLabel.text = item.username
             cell?.backgroundColor = .clear
@@ -166,37 +209,15 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let service = UnsplashService()
-        let photoViewModel = PhotoViewModel(service: service)
-        let photoViewController = PhotoViewController(viewModel: photoViewModel)
         switch segmentController.selectedSegmentIndex {
         case 0:
-            let item = viewModel.photos[indexPath.row]
-//            photoViewController.prifileName.setTitle(item.user.name, for: .normal)
-            photoViewController.title = item.user.name
-            photoViewController.photos = viewModel.photos
-            photoViewController.indexPathToScroll = indexPath.row
-            photoViewController.modalPresentationStyle = .fullScreen
-//            photoViewController.photoStarterDelegate = self
-            present(photoViewController, animated: true)
+            didSelectPhoto?(viewModel.photos, indexPath.row)
         case 1:
-            let photoDetailViewModel = PhotoDetailViewModel(service: service)
-            let photoDetailViewController = PhotoDetailViewController(viewModel: photoDetailViewModel)
-            let item = viewModel.collections[indexPath.row]
-            photoDetailViewController.collection = item
-            photoDetailViewController.title = item.title
-            presentedViewController?.navigationController?.pushViewController(photoDetailViewController, animated: true)
-//            presentingViewController.navigationController.p
-//            navigationController?.pushViewController(photoDetailViewController, animated: true)
+            didSelectCollection?(viewModel.collections, indexPath.row)
         case 2:
-            let item        = viewModel.users[indexPath.row]
-            let username    = item.username
-            let service     = UnsplashService()
-            let viewModel   = ProfileViewModel(service: service, username: username)
-            let profileVC   = ProfileViewController(viewModel: viewModel)
-            navigationController?.pushViewController(profileVC, animated: true)
+            didSelectUser?(viewModel.users[indexPath.row].username)
         default:
-            print("sd")
+            print("")
         }
     }
 }
@@ -204,19 +225,33 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
-        tableView.reloadData()
-        viewModel.searchText = text
-        viewModel.searchPhotos(query: text)
-        viewModel.searchCollections(query: text)
-        viewModel.searchUsers(query: text)
+        print("\(text) - \(searchText)")
+        if searchText != text {
+            searchText = text
+            viewModel.photos = []
+            viewModel.collections = []
+            viewModel.users = []
+            viewModel.usersCurrentPage = 1
+            viewModel.collectionsCurrentPage = 1
+            viewModel.usersCurrentPage = 1
+            viewModel.searchPhotos(query: searchText)
+            viewModel.searchCollections(query: searchText)
+            viewModel.searchUsers(query: searchText)
+            tableView.reloadData()
+        }
     }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        
-        viewModel.searchPhotos(query: "Hello")
-        viewModel.searchCollections(query: "Hello")
-        viewModel.searchUsers(query: "Hello")
-        tableView.reloadData()
-//        return cell!
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            self.searchText = searchText
+            viewModel.photos = []
+            viewModel.collections = []
+            viewModel.users = []
+            viewModel.usersCurrentPage = 1
+            viewModel.collectionsCurrentPage = 1
+            viewModel.usersCurrentPage = 1
+            tableView.reloadData()
+
+        }
     }
 }

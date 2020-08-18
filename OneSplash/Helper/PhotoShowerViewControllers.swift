@@ -10,9 +10,6 @@ import UIKit
 import NVActivityIndicatorView
 
 var containerView: UIView!
-
-var tableContainerView: UIView!
-
 class PhotoShowerViewControllers: UIViewController {
     var onceOnly = false
     var indexPathToStart: Int?
@@ -39,26 +36,6 @@ class PhotoShowerViewControllers: UIViewController {
         
         let activityIndicator = NVActivityIndicatorView(frame: .zero, type: .ballRotate, color: .gray, padding: 0)
         containerView.addSubview(activityIndicator)
-        activityIndicator.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-110)
-            make.width.height.equalTo(60)
-        }
-        activityIndicator.startAnimating()
-    }
-    
-    func showTableLoadView(in table: UIView) {
-        tableContainerView = UIView(frame: CGRect(x: 0, y: 50, width: table.frame.width, height: table.frame.height))
-        table.addSubview(tableContainerView)
-        tableContainerView.backgroundColor   = .bcc
-        tableContainerView.alpha             = 0
-        
-        UIView.animate(withDuration: 0.2) {
-            tableContainerView.alpha = 1
-        }
-        
-        let activityIndicator = NVActivityIndicatorView(frame: .zero, type: .ballRotate, color: .gray, padding: 0)
-        tableContainerView.addSubview(activityIndicator)
         activityIndicator.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-110)

@@ -9,16 +9,16 @@
 import UIKit
 import NVActivityIndicatorView
 
-class PhotoDetailViewController: PhotoShowerViewControllers {
+class CollectionPhotoViewController: PhotoShowerViewControllers {
     
-    let viewModel: PhotoDetailViewModel
+    let viewModel: CollectionPhotoViewModel
     var collection: Collection!
     var tableView = UITableView()
     
     var didSelectPhoto: (([Photo], Int) -> Void)?
     var didSelectUser: ((String) -> Void)?
     
-    init(viewModel: PhotoDetailViewModel) {
+    init(viewModel: CollectionPhotoViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -65,7 +65,7 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
         tableView.backgroundColor   = .bcc
         tableView.delegate          = self
         tableView.dataSource        = self
-        tableView.register(PhotosCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(CollectionPhotoCell.self, forCellReuseIdentifier: "cell")
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -76,13 +76,13 @@ class PhotoDetailViewController: PhotoShowerViewControllers {
     }
 }
 
-extension PhotoDetailViewController: UITableViewDelegate, UITableViewDataSource {
+extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? PhotosCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CollectionPhotoCell
         let item = viewModel.photos[indexPath.row]
         cell?.backgroundColor = UIColor( named: item.color ?? "")
         cell?.photoView.load(urlString: item.urls.thumb)

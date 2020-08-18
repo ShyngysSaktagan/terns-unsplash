@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PhotosCell: UITableViewCell {
+class CollectionPhotoCell: UITableViewCell {
     
     let photoView = UIImageView()
     

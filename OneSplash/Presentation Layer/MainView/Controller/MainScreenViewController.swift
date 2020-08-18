@@ -12,8 +12,8 @@ import NVActivityIndicatorView
 
 class MainScreenViewController: PhotoShowerViewControllers {
     
-    let mainViewViewModel: MainViewViewModel
-    let photoViewModel: PhotoDetailViewModel
+    let mainViewViewModel: MainScreenViewModel
+    let photoViewModel: CollectionPhotoViewModel
     let searchViewModel: SearchViewModel
     var searchViewController: SearchViewController
     
@@ -24,11 +24,21 @@ class MainScreenViewController: PhotoShowerViewControllers {
     var didSelectCollection: (([Collection], Int) -> Void)?
     var didSelectPhoto: (([Photo], Int) -> Void)?
     
-    init(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel, searchViewModel: SearchViewModel) {
+    init(mainViewViewModel: MainScreenViewModel,
+         photoViewModel: CollectionPhotoViewModel,
+         searchViewModel: SearchViewModel,
+         didSelectUser: @escaping (String) -> Void,
+         didSelectPhoto: @escaping (([Photo], Int) -> Void),
+         didSelectCollection: @escaping (([Collection], Int) -> Void)) {
         self.mainViewViewModel  = mainViewViewModel
         self.photoViewModel     = photoViewModel
         self.searchViewModel    = searchViewModel
-        searchViewController    = SearchViewController(viewModel: self.searchViewModel)
+        self.didSelectUser      = didSelectUser
+        self.didSelectPhoto     = didSelectPhoto
+        self.didSelectCollection = didSelectCollection
+        self.searchViewController    = SearchViewController(viewModel: searchViewModel,
+                                        didSelectUser: didSelectUser, didSelectPhoto: didSelectPhoto, didSelectCollection: didSelectCollection)
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,6 +50,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
         let searchController                = UISearchController(searchResultsController: searchViewController)
         searchController.searchBar.delegate = searchViewController
         searchController.obscuresBackgroundDuringPresentation = true
+        searchController.showsSearchResultsController = true
         return searchController
     }()
     
@@ -65,7 +76,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
         tableView.dataSource        = self
         tableView.backgroundColor   = .clear
         tableView.register(ExploreCellTableCell.self, forCellReuseIdentifier: "exploreCell")
-        tableView.register(PhotosCell.self, forCellReuseIdentifier: "newCell")
+        tableView.register(CollectionPhotoCell.self, forCellReuseIdentifier: "newCell")
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -109,13 +120,22 @@ class MainScreenViewController: PhotoShowerViewControllers {
         let offsetY         = scrollView.contentOffset.y
         let contentHeight   = scrollView.contentSize.height
         let height          = scrollView.frame.size.height
-        
+
         if !photoViewModel.isRequestPerforming && offsetY > contentHeight - height {
             photoViewModel.page += 1
             showLoadingView()
             fetchPhotos()
         }
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if (scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height {
+//            photoViewModel.page += 1
+//            showLoadingView()
+//            fetchPhotos()
+//        }
+//    }
+
 }
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
@@ -151,7 +171,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "exploreCell", for: indexPath) as? ExploreCellTableCell
             return cell!
         } else {
-            let cell                = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? PhotosCell
+            let cell                = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as? CollectionPhotoCell
             let item                = photoViewModel.photos[indexPath.row]
             
             cell?.photoView.load(urlString: item.urls.thumb)

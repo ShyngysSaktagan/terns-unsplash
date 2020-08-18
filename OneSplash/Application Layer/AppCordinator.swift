@@ -10,8 +10,8 @@ import UIKit
 
 class AppCoordinator: Coordinator {
     
-    let mainViewViewModel: MainViewViewModel
-    let photoViewModel: PhotoDetailViewModel
+    let mainViewViewModel: MainScreenViewModel
+    let photoViewModel: CollectionPhotoViewModel
     let searchViewModel: SearchViewModel
     var navigationController: UINavigationController
     
@@ -19,8 +19,8 @@ class AppCoordinator: Coordinator {
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        mainViewViewModel   = MainViewViewModel(service: UnsplashService())
-        photoViewModel      = PhotoDetailViewModel(service: UnsplashService())
+        mainViewViewModel   = MainScreenViewModel(service: UnsplashService())
+        photoViewModel      = CollectionPhotoViewModel(service: UnsplashService())
         searchViewModel     = SearchViewModel(service: UnsplashService())
     }
     
@@ -28,8 +28,16 @@ class AppCoordinator: Coordinator {
         showMainPage(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
     }
     
-    private func showMainPage(mainViewViewModel: MainViewViewModel, photoViewModel: PhotoDetailViewModel, searchViewModel: SearchViewModel) {
-        let page = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
+    private func showMainPage(mainViewViewModel: MainScreenViewModel, photoViewModel: CollectionPhotoViewModel, searchViewModel: SearchViewModel) {
+        let page = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel,
+            didSelectUser: { [weak self] username in
+                self?.showProfilePage(username: username, viewModel: ProfileViewModel(service: UnsplashService(), username: username))
+            }, didSelectPhoto: { [weak self] photos, index in
+                self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
+            }, didSelectCollection: { [weak self] collections, index in
+                self?.showCollectionPage(viewModel: CollectionPhotoViewModel(service: UnsplashService()), index: index, collections: collections)
+            }
+        )
         
         let service = UnsplashService()
         
@@ -46,7 +54,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectCollection = { [weak self] collections, index in
-            self?.showCollectionPage(viewModel: PhotoDetailViewModel(service: service), index: index, collections: collections)
+            self?.showCollectionPage(viewModel: CollectionPhotoViewModel(service: service), index: index, collections: collections)
         }
     
         navigationController.pushViewController(page, animated: true)
@@ -72,7 +80,7 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectCollection = { [weak self] collections, index in
-            self?.showCollectionPage(viewModel: PhotoDetailViewModel(service: UnsplashService()), index: index, collections: collections)
+            self?.showCollectionPage(viewModel: CollectionPhotoViewModel(service: UnsplashService()), index: index, collections: collections)
         }
         
         navigationController.pushViewController(page, animated: true)
@@ -97,9 +105,9 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(page, animated: true)
     }
     
-    func showCollectionPage(viewModel: PhotoDetailViewModel, index: Int, collections: [Collection]) {
+    func showCollectionPage(viewModel: CollectionPhotoViewModel, index: Int, collections: [Collection]) {
         let item = collections[index]
-        let page = PhotoDetailViewController(viewModel: viewModel)
+        let page = CollectionPhotoViewController(viewModel: viewModel)
         
         self.changeContact = { [weak page] index in
             page?.indexPathToStart = index

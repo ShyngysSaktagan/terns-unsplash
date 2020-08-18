@@ -1,5 +1,5 @@
 //
-//  Labels.swift
+//  Symbols.swift
 //  OneSplash
 //
 //  Created by Shyngys Saktagan on 8/11/20.

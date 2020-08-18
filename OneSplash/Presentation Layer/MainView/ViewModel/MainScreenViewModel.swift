@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewViewModel {
+class MainScreenViewModel {
     
     var collections : [Collection]  = []
     var page                        = 1

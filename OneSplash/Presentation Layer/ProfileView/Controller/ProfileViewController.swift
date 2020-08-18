@@ -11,6 +11,8 @@ import UIKit
 class ProfileViewController: PhotoShowerViewControllers {
     
     let viewModel: ProfileViewModel
+    let tableView = ParalaxTableView()
+    let tableViewHeader = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 145))
     
     init(viewModel: ProfileViewModel) {
         self.viewModel = viewModel
@@ -52,16 +54,8 @@ class ProfileViewController: PhotoShowerViewControllers {
         return imageView
     }()
     
-    let headerView = UIView()
-    
     func configureHeaderView() {
-        [usernameLabel, userLocationStackView, userPicture].forEach { headerView.addSubview($0) }
-        view.addSubview(headerView)
-        headerView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(15)
-            make.height.equalTo(150)
-            make.leading.trailing.equalToSuperview()
-        }
+        [usernameLabel, userLocationStackView, userPicture].forEach { tableViewHeader.addSubview($0) }
         userPicture.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(15)
             make.height.width.equalTo(60)
@@ -108,18 +102,12 @@ class ProfileViewController: PhotoShowerViewControllers {
         tableView.reloadData()
     }
     
-    let tableView : UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableViewHeader.backgroundColor = .bcc
         view.backgroundColor = .bcc
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
-//        configureUserLabels()
         configureHeaderView()
         configureTableView()
         fetchViewModelDatas()
@@ -130,44 +118,26 @@ class ProfileViewController: PhotoShowerViewControllers {
         let actionVC = UIActivityViewController(activityItems: [viewModel.user?.links?.html as Any], applicationActivities: [])
         present(actionVC, animated: true)
     }
-    
-//    func configureUserLabels() {
-//        [userPicture, usernameLabel, userLocationStackView].forEach { view.addSubview($0) }
-//
-//        userPicture.snp.makeConstraints { make in
-//            make.top.leading.equalTo(view.safeAreaLayoutGuide).inset(15)
-//            make.height.width.equalTo(60)
-//        }
-//        usernameLabel.snp.makeConstraints { make in
-//            make.top.equalTo(userPicture.snp.bottom).offset(10)
-//            make.leading.trailing.equalToSuperview().inset(15)
-//        }
-//        userLocationStackView.snp.makeConstraints { make in
-//            make.top.equalTo(usernameLabel.snp.bottom).offset(10)
-//            make.leading.trailing.equalToSuperview().offset(15)
-//        }
-//    }
 
     func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-        tableView.register(PhotosCell.self, forCellReuseIdentifier: "photos")
+        tableView.register(CollectionPhotoCell.self, forCellReuseIdentifier: "photos")
         tableView.register(CollectionViewCell.self, forCellReuseIdentifier: "collections")
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(userLocationStackView.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        tableView.tableHeaderView = tableViewHeader
     }
     
     func showEmptyStateView(with message: String, image: String, in view: UIView, tag: Int) {
         let emptyStateView  = EmptyStateView(message: message, logoImage: image)
         emptyStateView.tag = tag
-        emptyStateView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height)
+        emptyStateView.frame = CGRect(x: 0, y: 250, width: view.frame.width, height: view.frame.height - 350)
         emptyStateView.isUserInteractionEnabled = true
         view.addSubview(emptyStateView)
     }
@@ -188,6 +158,28 @@ class ProfileViewController: PhotoShowerViewControllers {
             locationImageView.isHidden = true
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) else {
+            return
+        }
+        switch segmentController.selectedSegmentIndex {
+        case 0:
+            if viewModel.isPhotosRequestPerforming {
+                viewModel.getUserPhotos()
+            }
+        case 1:
+            if viewModel.isCollectionRequestPerforming {
+                viewModel.getUserCollections()
+            }
+        case 2:
+            if viewModel.isLikesRequestPerforming {
+                viewModel.getUserLikes()
+            }
+        default:
+            print("")
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
@@ -196,19 +188,19 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         switch segmentController.selectedSegmentIndex {
         case 0:
             if viewModel.photos.isEmpty {
-                let message = "No photos"
+                let message = EmptyMessage.emptyPhoto
                 self.showEmptyStateView(with: message, image: Symbols.emptyPhoto, in: self.tableView, tag: 100)
             }
             return viewModel.photos.count
         case 1:
             if viewModel.likes.isEmpty {
-                let message = "No likes"
+                let message = EmptyMessage.emptyLike
                 self.showEmptyStateView(with: message, image: Symbols.emptyLike, in: self.tableView, tag: 101)
             }
             return viewModel.likes.count
         case 2:
             if viewModel.collections.isEmpty {
-                let message = "No collections"
+                let message = EmptyMessage.emptyCollection
                 self.showEmptyStateView(with: message, image: Symbols.emptyCollection, in: self.tableView, tag: 102)
             }
             return viewModel.collections.count
@@ -225,14 +217,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         checkLabels()
         switch segmentController.selectedSegmentIndex {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.photos[indexPath.row]
             cell?.photoView.load(urlString: item.urls.regular)
             cell?.selectionStyle = .none
             cell?.backgroundColor = UIColor(hexString: item.color!)
             return cell!
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? PhotosCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.likes[indexPath.row]
             cell?.photoView.load(urlString: item.urls.regular)
             cell?.selectionStyle = .none
@@ -300,7 +292,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             didSelectCollection?(viewModel.collections, indexPath.row)
         default:
-            print("sd")
+            print("")
         }
     }
 }

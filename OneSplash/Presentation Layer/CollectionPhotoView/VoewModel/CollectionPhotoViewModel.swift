@@ -8,7 +8,7 @@
 //
 import UIKit
 
-class PhotoDetailViewModel {
+class CollectionPhotoViewModel {
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
     var page                = 1

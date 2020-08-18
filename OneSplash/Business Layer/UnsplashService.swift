@@ -137,10 +137,11 @@ class UnsplashService {
         }
     }
     
-    func getUserPhotos(username: String, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+    func getUserPhotos(username: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "username": username
+            "username": username,
+            "page": page
         ]
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
@@ -165,10 +166,11 @@ class UnsplashService {
         }
     }
     
-    func getUserLikes(username: String, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+    func getUserLikes(username: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "username": username
+            "username": username,
+            "page": page
         ]
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
@@ -193,10 +195,11 @@ class UnsplashService {
         }
     }
     
-    func getUserCollections(username: String, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
+    func getUserCollections(username: String, page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "username": username
+            "username": username,
+            "page": page
         ]
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.userPostfix + "/\(username)" +
             UnsplashAPI.collectionsPostfix , method: .get, parameters: params).response { (response) in
@@ -220,10 +223,11 @@ class UnsplashService {
         }
     }
     
-    func searchPhotos(query: String, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+    func searchPhotos(query: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "query": query
+            "query": query,
+            "page": page
         ]
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.photosPostfix,
@@ -246,10 +250,11 @@ class UnsplashService {
         }
     }
     
-    func searchCollections(query: String, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
+    func searchCollections(query: String, page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "query": query
+            "query": query,
+            "page": page
         ]
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.collectionsPostfix,
@@ -272,10 +277,11 @@ class UnsplashService {
         }
     }
     
-    func searchUsers(query: String, success: @escaping ([User]) -> Void, failure: @escaping (AFError) -> Void) {
+    func searchUsers(query: String, page: Int, success: @escaping ([User]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
-            "query": query
+            "query": query,
+            "page": page
         ]
         
         AF.request(UnsplashAPI.baseURL + UnsplashAPI.searchPostfix + UnsplashAPI.userPostfix,
