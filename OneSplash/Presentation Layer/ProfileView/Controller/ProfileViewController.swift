@@ -173,7 +173,7 @@ class ProfileViewController: PhotoShowerViewControllers {
         tableView.reloadData()
     }
     
-    @objc private func didTapNumber(_ sender: UIButton) {
+    @objc private func didTapUsername(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
         didSelectUser?(username)
     }
@@ -229,7 +229,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             let item = viewModel.likes[indexPath.row]
             cell?.item = item
             cell?.button.setTitle(item.user.username, for: .normal)
-            cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+            cell?.button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
             return cell!
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "collections", for: indexPath) as? CollectionViewCell

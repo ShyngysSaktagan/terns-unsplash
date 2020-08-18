@@ -141,7 +141,7 @@ class PhotoViewController: UIViewController {
         present(actionVC, animated: true)
     }
     
-    @objc private func didTapNumber(_ sender: UIButton) {
+    @objc private func didTapUsername(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
         print(username)
         didSelectUser?(username)
@@ -166,7 +166,7 @@ extension PhotoViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         let item = photos[indexPath.row]
         cell?.imageView.load(urlString: item.urls.small)
-        titleButton.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+        titleButton.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
         infoView.addInfo(of: item)
         return cell!
     }

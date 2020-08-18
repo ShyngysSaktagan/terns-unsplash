@@ -113,7 +113,7 @@ class SearchViewController: PhotoShowerViewControllers {
         tableView.reloadData()
     }
     
-    @objc private func didTapNumber(_ sender: UIButton) {
+    @objc private func didTapUsername(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
         didSelectUser?(username)
     }
@@ -158,7 +158,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "photos", for: indexPath) as? CollectionPhotoCell
             let item = viewModel.photos[indexPath.row]
             cell?.button.setTitle(item.user.username, for: .normal)
-            cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+            cell?.button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
             cell?.item = item
             return cell!
         case 1:
@@ -211,12 +211,6 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
         print("\(text) - \(searchText)")
-        if text == "" {
-            viewModel.photos = []
-            viewModel.collections = []
-            viewModel.users = []
-            tableView.reloadData()
-        }
         if searchText != text {
             searchText = text
             viewModel.photos = []

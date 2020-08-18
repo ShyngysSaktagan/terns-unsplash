@@ -14,7 +14,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
     
 // MARK: - Class Properties
     
-    let mainViewViewModel: MainScreenViewModel
+    let mainScreenViewModel: MainScreenViewModel
     let photoViewModel: CollectionPhotoViewModel
     let searchViewModel: SearchViewModel
     var searchViewController: SearchViewController
@@ -44,7 +44,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
          didSelectUser: @escaping (String) -> Void,
          didSelectPhoto: @escaping (([Photo], Int) -> Void),
          didSelectCollection: @escaping (([Collection], Int) -> Void)) {
-        self.mainViewViewModel  = mainViewViewModel
+        self.mainScreenViewModel  = mainViewViewModel
         self.photoViewModel     = photoViewModel
         self.searchViewModel    = searchViewModel
         self.didSelectUser      = didSelectUser
@@ -99,7 +99,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     private func bindViewModel() {
-        mainViewViewModel.didLoadTableItems = { [weak self] in
+        mainScreenViewModel.didLoadTableItems = { [weak self] in
             self?.tableView.reloadData()
         }
         photoViewModel.didLoadTableItems = { [weak self] in
@@ -114,7 +114,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
     }
     
     private func fetchCollections() {
-        mainViewViewModel.getCollections()
+        mainScreenViewModel.getCollections()
     }
     
     private func fetchPhotos() {
@@ -135,7 +135,7 @@ class MainScreenViewController: PhotoShowerViewControllers {
     
     // MARK: @objc functions
     
-    @objc private func didTapNumber(_ sender: UIButton) {
+    @objc private func didTapUsername(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
         didSelectUser?(username)
     }
@@ -177,7 +177,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             let item                = photoViewModel.photos[indexPath.row]
             cell?.item = item
             cell?.button.setTitle(item.user.username, for: .normal)
-            cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+            cell?.button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
             return cell!
         }
     }
@@ -222,16 +222,16 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return mainViewViewModel.collections.count
+        return mainScreenViewModel.collections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ExploreCell
-        let item = mainViewViewModel.collections[indexPath.row]
-        if (indexPath.row+1) / mainViewViewModel.counting == 1 {
-            mainViewViewModel.page += 1
-            mainViewViewModel.getCollections()
-            mainViewViewModel.counting += mainViewViewModel.constantCount
+        let item = mainScreenViewModel.collections[indexPath.row]
+        if (indexPath.row+1) / mainScreenViewModel.counting == 1 {
+            mainScreenViewModel.page += 1
+            mainScreenViewModel.getCollections()
+            mainScreenViewModel.counting += mainScreenViewModel.constantCount
         }
         
         cell?.backgroundColor = UIColor(hexString: item.coverPhoto.color!)
@@ -242,6 +242,6 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.didSelectCollection?(mainViewViewModel.collections, indexPath.row)
+        self.didSelectCollection?(mainScreenViewModel.collections, indexPath.row)
     }
 }

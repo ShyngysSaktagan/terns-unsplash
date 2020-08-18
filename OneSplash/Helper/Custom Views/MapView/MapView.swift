@@ -46,17 +46,6 @@ class MapView: MKMapView {
     func checkLocationServices() {
         if CLLocationManager.locationServicesEnabled() {
             checkLocationAuthorization()
-        } else {
-            let alert = UIAlertController(title: "У вас выключена служба геолокация", message: "Хотите включить?", preferredStyle: .alert)
-            let settingsAction = UIAlertAction(title: "Настройки", style: .default) { _ in
-                if let url = URL(string: "App-Prefs:root=LOCATION_SERVICES") {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }
-            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-            
-            alert.addAction(cancelAction)
-            alert.addAction(settingsAction)
         }
     }
     

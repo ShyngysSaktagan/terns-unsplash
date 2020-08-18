@@ -15,7 +15,7 @@ class AppCoordinator: Coordinator {
     let searchViewModel: SearchViewModel
     var navigationController: UINavigationController
     
-    var changeContact: ((Int) -> Void)?
+    var startIndex: ((Int) -> Void)?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -40,9 +40,7 @@ class AppCoordinator: Coordinator {
             }
         )
         
-        let service = UnsplashService()
-        
-        self.changeContact = { [weak page] index in
+        self.startIndex = { [weak page] index in
             page?.indexPathToStart = index
         }
         
@@ -51,11 +49,11 @@ class AppCoordinator: Coordinator {
         }
         
         page.didSelectPhoto = { [weak self] photos, index in
-            self?.showPhotoPage(viewModel: PhotoViewModel(service: service), index: index, photos: photos)
+            self?.showPhotoPage(viewModel: PhotoViewModel(service: UnsplashService()), index: index, photos: photos)
         }
         
         page.didSelectCollection = { [weak self] collections, index in
-            self?.showCollectionPage(viewModel: CollectionPhotoViewModel(service: service), index: index, collections: collections)
+            self?.showCollectionPage(viewModel: CollectionPhotoViewModel(service: UnsplashService()), index: index, collections: collections)
         }
     
         navigationController.pushViewController(page, animated: true)
@@ -65,7 +63,7 @@ class AppCoordinator: Coordinator {
     func showProfilePage(username: String, viewModel: ProfileViewModel) {
         let page = ProfileViewController(viewModel: viewModel)
         
-        self.changeContact = { [weak page] index in
+        self.startIndex = { [weak page] index in
             page?.indexPathToStart = index
         }
         
@@ -94,7 +92,7 @@ class AppCoordinator: Coordinator {
         let page = PhotoViewController(viewModel: viewModel)
         
         page.didExitClicked = { [weak self] (index) in
-            self?.changeContact?(index)
+            self?.startIndex?(index)
             self?.navigationController.popViewController(animated: true)
         }
         
@@ -113,7 +111,7 @@ class AppCoordinator: Coordinator {
         let item = collections[index]
         let page = CollectionPhotoViewController(viewModel: viewModel)
         
-        self.changeContact = { [weak page] index in
+        self.startIndex = { [weak page] index in
             page?.indexPathToStart = index
         }
         

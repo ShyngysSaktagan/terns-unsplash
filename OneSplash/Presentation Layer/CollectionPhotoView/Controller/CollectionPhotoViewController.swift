@@ -84,7 +84,7 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
     
     // MARK: @objc functions
     
-    @objc private func didTapNumber(_ sender: UIButton) {
+    @objc private func didTapUsername(_ sender: UIButton) {
         let username = (sender.titleLabel?.text ?? "").lowercased()
         didSelectUser?(username)
     }
@@ -108,7 +108,7 @@ extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSou
         cell?.backgroundColor = UIColor( named: item.color ?? "")
         cell?.photoView.load(urlString: item.urls.small)
         cell?.button.setTitle(item.user.username, for: .normal)
-        cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
+        cell?.button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
         return cell!
     }
     
