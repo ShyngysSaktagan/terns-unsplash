@@ -29,8 +29,10 @@ class MainScreenViewController: PhotoShowerViewControllers {
     private lazy var searchController: UISearchController = {
         let searchController                = UISearchController(searchResultsController: searchViewController)
         searchController.searchBar.delegate = searchViewController
-        searchController.obscuresBackgroundDuringPresentation = true
+        
         searchController.showsSearchResultsController = true
+        searchController.searchBar.barStyle = .black
+        self.extendedLayoutIncludesOpaqueBars = true
         return searchController
     }()
     
