@@ -19,8 +19,8 @@ class MainScreenViewController: PhotoShowerViewControllers {
     let searchViewModel: SearchViewModel
     var searchViewController: SearchViewController
     
-    let tableView       = UITableView()
-    let sectionTypes    = [ "Explore", "New" ]
+    private let tableView       = UITableView()
+    private let sectionTypes    = [ "Explore", "New" ]
     
     var didSelectUser: ((String) -> Void)?
     var didSelectCollection: (([Collection], Int) -> Void)?
@@ -145,8 +145,9 @@ class MainScreenViewController: PhotoShowerViewControllers {
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let label = TitleLabel(textAlignment: .right, fontSize: 24, weight: .regular, color: .white)
-        let headerView              = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
+        let label = TitleLabel(textAlignment: .left, fontSize: 24, weight: .regular, color: .white)
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
+        label.text = sectionTypes[section]
         headerView.backgroundColor  = .bcc
         headerView.addSubview(label)
         label.snp.makeConstraints { make in
@@ -235,7 +236,7 @@ extension MainScreenViewController: UICollectionViewDelegateFlowLayout, UICollec
         
         cell?.backgroundColor = UIColor(hexString: item.coverPhoto.color!)
         cell?.layer.cornerRadius = 12
-        cell?.imageView.load(urlString: item.coverPhoto.urls.thumb)
+        cell?.imageView.load(urlString: item.coverPhoto.urls.small)
         cell?.titleLabel.text = item.title
         return cell!
     }

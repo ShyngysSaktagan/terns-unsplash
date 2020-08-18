@@ -15,7 +15,7 @@ class CollectionPhotoViewController: PhotoShowerViewControllers {
     
     let viewModel: CollectionPhotoViewModel
     var collection: Collection!
-    var tableView = UITableView()
+    private var tableView = UITableView()
     
     var didSelectPhoto: (([Photo], Int) -> Void)?
     var didSelectUser: ((String) -> Void)?
@@ -106,7 +106,7 @@ extension CollectionPhotoViewController: UITableViewDelegate, UITableViewDataSou
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CollectionPhotoCell
         let item = viewModel.photos[indexPath.row]
         cell?.backgroundColor = UIColor( named: item.color ?? "")
-        cell?.photoView.load(urlString: item.urls.thumb)
+        cell?.photoView.load(urlString: item.urls.small)
         cell?.button.setTitle(item.user.username, for: .normal)
         cell?.button.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
         return cell!

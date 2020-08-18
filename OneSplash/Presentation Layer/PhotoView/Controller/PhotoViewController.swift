@@ -165,7 +165,7 @@ extension PhotoViewController: UICollectionViewDataSource, UICollectionViewDeleg
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCell
         
         let item = photos[indexPath.row]
-        cell?.imageView.load(urlString: item.urls.thumb)
+        cell?.imageView.load(urlString: item.urls.small)
         titleButton.addTarget(self, action: #selector(didTapNumber), for: .touchUpInside)
         infoView.addInfo(of: item)
         return cell!
@@ -181,7 +181,7 @@ extension PhotoViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         let item = photos[currentIndex]
         titleButton.setTitle(item.user.username, for: .normal)
-        currentPhoto.load(urlString: item.urls.thumb)
+        currentPhoto.load(urlString: item.urls.small)
         indexPathToEnd = currentIndex
         fetchPhotoData(id: item.id)
         guard let photoInfo = viewModel.photo else {

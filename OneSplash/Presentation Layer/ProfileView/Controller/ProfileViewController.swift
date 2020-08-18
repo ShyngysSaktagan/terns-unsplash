@@ -13,18 +13,18 @@ class ProfileViewController: PhotoShowerViewControllers {
     // MARK: - Class Properties
     
     let viewModel: ProfileViewModel
-    let tableView           = ParalaxTableView()
-    let tableViewHeader     = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 145))
-    let usernameLabel       = TitleLabel(textAlignment: .left, fontSize: 25, weight: .bold)
-    let userlocationLabel   = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
-    let userURL             = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
+    private let tableView           = ParalaxTableView()
+    private let tableViewHeader     = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 145))
+    private let usernameLabel       = TitleLabel(textAlignment: .left, fontSize: 25, weight: .bold)
+    private let userlocationLabel   = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
+    private let userURL             = TitleLabel(textAlignment: .left, fontSize: 16, weight: .medium, color: .gray)
     
     var didSelectUser: ((String) -> Void)?
     var didSelectLike: (([Photo], Int) -> Void)?
     var didSelectCollection: (([Collection], Int) -> Void)?
     var didSelectPhoto: (([Photo], Int) -> Void)?
     
-    let segmentController: UISegmentedControl = {
+    private let segmentController: UISegmentedControl = {
         let segmentController = UISegmentedControl(items: ["Photo", "Likes", "Collections"])
         segmentController.translatesAutoresizingMaskIntoConstraints = false
         segmentController.selectedSegmentIndex = 0
@@ -33,14 +33,14 @@ class ProfileViewController: PhotoShowerViewControllers {
         return segmentController
     }()
         
-    let userPicture : UIImageView = {
+    private let userPicture : UIImageView = {
         let imageView = UIImageView(cornerRadius: 16)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .white
         return imageView
     }()
     
-    let locationImageView: UIImageView = {
+    private let locationImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: Symbols.pin)
         imageView.tintColor = .gray

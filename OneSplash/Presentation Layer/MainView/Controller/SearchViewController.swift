@@ -13,7 +13,7 @@ class SearchViewController: PhotoShowerViewControllers {
 // MARK: - Class Properties
 
     let viewModel: SearchViewModel
-    var searchText = ""
+    private var searchText = ""
     
     var didSelectUser: ((String) -> Void)?
     var didSelectCollection: (([Collection], Int) -> Void)?
