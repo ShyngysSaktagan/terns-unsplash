@@ -13,7 +13,6 @@ class SearchViewModel {
     var photos: [Photo]             = []
     var users: [User]               = []
     var collections: [Collection]   = []
-    var searchText: String?
     var photosCurrentPage = 1
     var collectionsCurrentPage = 1
     var usersCurrentPage = 1

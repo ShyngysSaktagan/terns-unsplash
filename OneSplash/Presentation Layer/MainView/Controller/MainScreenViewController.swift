@@ -127,15 +127,6 @@ class MainScreenViewController: PhotoShowerViewControllers {
             fetchPhotos()
         }
     }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if (scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height {
-//            photoViewModel.page += 1
-//            showLoadingView()
-//            fetchPhotos()
-//        }
-//    }
-
 }
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
@@ -148,7 +139,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource {
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(10)
         }
-        
+         
         return headerView
     }
     

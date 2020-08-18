@@ -28,6 +28,7 @@ class AppCoordinator: Coordinator {
         showMainPage(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel)
     }
     
+    // MARK: Main Page
     private func showMainPage(mainViewViewModel: MainScreenViewModel, photoViewModel: CollectionPhotoViewModel, searchViewModel: SearchViewModel) {
         let page = MainScreenViewController(mainViewViewModel: mainViewViewModel, photoViewModel: photoViewModel, searchViewModel: searchViewModel,
             didSelectUser: { [weak self] username in
@@ -60,6 +61,7 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(page, animated: true)
     }
     
+    // MARK: Profile Page
     func showProfilePage(username: String, viewModel: ProfileViewModel) {
         let page = ProfileViewController(viewModel: viewModel)
         
@@ -86,6 +88,7 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(page, animated: true)
     }
     
+    // MARK: Photo Page
     func showPhotoPage(viewModel: PhotoViewModel, index: Int, photos: [Photo]) {
         let item = photos[index]
         let page = PhotoViewController(viewModel: viewModel)
@@ -105,6 +108,7 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(page, animated: true)
     }
     
+    // MARK: Photo Collections Page
     func showCollectionPage(viewModel: CollectionPhotoViewModel, index: Int, collections: [Collection]) {
         let item = collections[index]
         let page = CollectionPhotoViewController(viewModel: viewModel)

@@ -11,7 +11,8 @@ import Alamofire
 
 class UnsplashService {
     
-    func getSamplePhotos(page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
+    // MARK: Get new photos
+    func getNewPhotos(page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
             "page" : page
@@ -35,6 +36,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get photo by id
     func getPhoto(id: String, success: @escaping (Photo) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -59,6 +61,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get Collections info
     func getCollections(page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -84,6 +87,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get Photos by id
     func getPhotos(id: Int, totalPhotos: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -111,6 +115,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get Photos by username
     func getUser(username: String, success: @escaping (User) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -137,6 +142,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get profile photos by username
     func getUserPhotos(username: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -153,8 +159,6 @@ class UnsplashService {
                         decoder.keyDecodingStrategy = .convertFromSnakeCase
                         do {
                             let photos = try decoder.decode([Photo].self, from: data!)
-                            print("Photos")
-                            print(photos)
                             success(photos)
                         } catch {
                             debugPrint(error)
@@ -166,6 +170,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get profile Likes by username
     func getUserLikes(username: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -182,8 +187,6 @@ class UnsplashService {
                         decoder.keyDecodingStrategy = .convertFromSnakeCase
                         do {
                             let photos = try decoder.decode([Photo].self, from: data!)
-                            print("Likes")
-                            print(photos)
                             success(photos)
                         } catch {
                             debugPrint(error)
@@ -195,6 +198,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Get profile Collections by username
     func getUserCollections(username: String, page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -210,8 +214,6 @@ class UnsplashService {
                         decoder.keyDecodingStrategy = .convertFromSnakeCase
                         do {
                             let photos = try decoder.decode([Collection].self, from: data!)
-                            print("Collections")
-                            print(photos)
                             success(photos)
                         } catch {
                             debugPrint(error)
@@ -223,6 +225,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Search photos by query
     func searchPhotos(query: String, page: Int, success: @escaping ([Photo]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -250,6 +253,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Search collections by query
     func searchCollections(query: String, page: Int, success: @escaping ([Collection]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,
@@ -277,6 +281,7 @@ class UnsplashService {
         }
     }
     
+    // MARK: Search user by query
     func searchUsers(query: String, page: Int, success: @escaping ([User]) -> Void, failure: @escaping (AFError) -> Void) {
         let params: Parameters = [
             "client_id": UnsplashAPI.Stoken,

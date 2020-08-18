@@ -11,9 +11,7 @@ import SnapKit
 
 class CollectionPhotoCell: UITableViewCell {
     
-    let photoView = UIImageView()
-    
-    var index = 1
+    let photoView   = UIImageView()
     
     let button: UIButton = {
         let button              = UIButton(type: .system)

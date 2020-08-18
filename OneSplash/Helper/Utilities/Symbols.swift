@@ -18,4 +18,5 @@ enum Symbols {
     static let emptyPhoto       = "photo.on.rectangle.angled"
     static let emptyLike        = "hand.thumbsup"
     static let emptyCollection  = "tray.full"
+    static let emptyUser  = "person"
 }

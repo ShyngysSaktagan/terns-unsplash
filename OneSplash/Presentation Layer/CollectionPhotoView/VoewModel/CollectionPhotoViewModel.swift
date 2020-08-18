@@ -36,7 +36,7 @@ class CollectionPhotoViewModel {
     
     func getNewPhotos() {
         isRequestPerforming = true
-        service.getSamplePhotos(page: page, success: { [weak self]  data in
+        service.getNewPhotos(page: page, success: { [weak self]  data in
             self?.isRequestPerforming = false
             containerView.alpha = 0
             containerView       = nil

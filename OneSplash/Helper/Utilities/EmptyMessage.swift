@@ -12,4 +12,5 @@ enum EmptyMessage {
     static let emptyPhoto       = "No photos"
     static let emptyLike        = "No likes"
     static let emptyCollection  = "No collections"
+    static let emptyUser        = "No users"
 }

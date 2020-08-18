@@ -16,9 +16,7 @@ class PhotoViewController: UIViewController {
     var indexPathToScroll: Int?
     var indexPathToEnd: Int?
     var onceOnly = false
-    var currentPhoto = UIImageView()
     let infoView = InfoView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: 800))
-    
     var didSaveButtonClicked: ((Int) -> Void)?
     var didSelectUser: ((String) -> Void)?
     
@@ -31,18 +29,65 @@ class PhotoViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .bcc
+        configureNavigationItem()
+        configureCollectionView()
+        configureSaveButton()
+        configureInfoButton()
+        configureInfoView()
+    }
+    
+    func configureNavigationItem() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: #selector(exit))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+        navigationItem.titleView = titleButton
+    }
+    
+    func configureCollectionView() {
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    func configureSaveButton() {
+        view.addSubview(saveButton)
+        saveButton.snp.makeConstraints { make in
+            make.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.width.height.equalTo(60)
+        }
+    }
+    
+    func configureInfoButton() {
+        view.addSubview(infoButton)
+        infoButton.snp.makeConstraints { make in
+            make.leading.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.width.height.equalTo(40)
+        }
+        saveButton.layer.cornerRadius = saveButton.frame.size.height / 2.0
+        saveButton.clipsToBounds = true
+    }
+    
+    func configureInfoView() {
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGasture(_:)))
+        infoView.dismissButton.addTarget(self, action: #selector(didTapDismissButton), for: .touchUpInside)
+        infoView.addGestureRecognizer(panGestureRecognizer)
+    }
+    
     private var blackBackgroundView : UIView = {
         let black = UIView()
         black.frame = UIScreen.main.bounds
         black.backgroundColor = UIColor.black
         return black
     }()
-    
-    private func bindViewModel() {
-        viewModel.didLoadTableItems = { [weak self] in
-            self?.collectionView.reloadData()
-        }
-    }
 
     let saveButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -63,13 +108,6 @@ class PhotoViewController: UIViewController {
         return button
     }()
     
-    @objc private func didTapNumber(_ sender: UIButton) {
-        
-        let username = (sender.titleLabel?.text ?? "").lowercased()
-        print(username)
-        didSelectUser?(username)
-    }
-    
     let infoButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
@@ -79,15 +117,24 @@ class PhotoViewController: UIViewController {
         return button
     }()
     
+    let collectionView: UICollectionView = {
+        let layout = BetterSnappingLayout()
+        layout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "cell")
+        return collectionView
+    }()
+    
     @objc func showInfo() {
         UIView.animate(withDuration: 0.4) { [weak self] in
             self?.infoView.transform = CGAffineTransform(translationX: 0, y: -InfoView.height)
-            self?.animationss()
+            self?.animations()
         }
     }
     
     @objc func save() {
-        guard let imageToSave = currentPhoto.image else {return }
+        guard let imageToSave = viewModel.currentPhoto?.image else {return }
         UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
     }
     
@@ -101,71 +148,15 @@ class PhotoViewController: UIViewController {
         present(actionVC, animated: true)
     }
     
-    let collectionView: UICollectionView = {
-        let layout = BetterSnappingLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: "cell")
-        return collectionView
-    }()
-    
-    func configureSaveButton() {
-        view.addSubview(saveButton)
-        saveButton.snp.makeConstraints { make in
-            make.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.width.height.equalTo(60)
-        }
-    }
-    
-    func configureInfoButton() {
-        view.addSubview(infoButton)
-        infoButton.snp.makeConstraints { make in
-            make.leading.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.width.height.equalTo(40)
-        }
-        saveButton.layer.cornerRadius = saveButton.frame.size.height / 2.0
-        saveButton.clipsToBounds = true
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: #selector(exit))
-        if #available(iOS 13.0, *) {
-            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        } else {
-            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        }
-        view.backgroundColor = .bcc
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
-        navigationItem.titleView = titleButton
-        configureCollectionView()
-        configureSaveButton()
-        configureInfoButton()
-        configureInfoView()
-    }
-    
-    func configureInfoView() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGasture(_:)))
-        infoView.dismissButton.addTarget(self, action: #selector(didTapDismissButton), for: .touchUpInside)
-        infoView.addGestureRecognizer(panGestureRecognizer)
-    }
-    
-    func configureCollectionView() {
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.collectionViewLayout.invalidateLayout()
+    @objc private func didTapNumber(_ sender: UIButton) {
+        let username = (sender.titleLabel?.text ?? "").lowercased()
+        print(username)
+        didSelectUser?(username)
     }
 }
 
-extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // MARK: - extension CollectionView (DataSource, ViewDelegateFlowLayout)
+extension PhotoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -196,7 +187,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         let item = photos[currentIndex]
         titleButton.setTitle(item.user.username, for: .normal)
-        currentPhoto.load(urlString: item.urls.thumb)
+        viewModel.currentPhoto?.load(urlString: item.urls.thumb)
         indexPathToEnd = currentIndex
         fetchPhotoData(id: item.id)
         guard let photoInfo = viewModel.photo else {
@@ -207,7 +198,6 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func fetchPhotoData(id: String) {
         viewModel.getPhoto(id: id)
-        //        infoView.addInfo(of: viewModel.photo ?? )
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -218,6 +208,9 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
     
+    // MARK: - Animations
+    
+    // MARK: Drag down animation
     @objc private func handlePanGasture(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .changed:
@@ -235,8 +228,8 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
     
+    // MARK: Dissmiss if tap animation
     @objc private func didTapDismissButton() {
-        
         UIView.animate(withDuration: 0.4, animations: { [weak self] in
             self?.infoView.transform = .identity
             self?.blackBackgroundView.alpha = 0
@@ -247,7 +240,8 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         })
     }
     
-    func animationss() {
+    // MARK: animate dark background
+    func animations() {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOut)))
         
         blackBackgroundView.alpha = 0
@@ -260,6 +254,7 @@ extension PhotoViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }, completion: nil)
     }
     
+    // MARK: dismiss InfoView
     @objc func zoomOut() {
         UIView.animate(withDuration: 0.75, animations: { () -> Void in
             self.blackBackgroundView.alpha = 0

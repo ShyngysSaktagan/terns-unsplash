@@ -12,6 +12,7 @@ class PhotoViewModel {
     let service : UnsplashService
     var didLoadTableItems: (() -> Void)?
     var photo: Photo?
+    var currentPhoto: UIImageView?
     
     init(service: UnsplashService) {
         self.service = service
